@@ -1,1 +1,431 @@
-<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AutoHeal-AI Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-- ==========================
+            SIDEBAR
+    =========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>🤖 AutoHeal-AI</h2>
+
+            <p>Predict • Heal • Learn</p>
+
+        </div>
+
+        <nav>
+
+            <ul>
+
+                <li class="active">
+                    🏠 Dashboard
+                </li>
+
+                <li>
+                    📈 Monitoring
+                </li>
+
+                <li>
+                    🤖 AI Analysis
+                </li>
+
+                <li>
+                    🚨 Incidents
+                </li>
+
+                <li>
+                    📊 Reports
+                </li>
+
+                <li>
+                    ⚙ Settings
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <!-- ==========================
+            MAIN CONTENT
+    =========================== -->
+
+    <main class="main">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>System Monitoring Dashboard</h1>
+
+                <p>
+                    AI Powered Predictive Monitoring &
+                    Autonomous Self-Healing
+                </p>
+
+            </div>
+
+            <div class="top-right">
+
+                <span class="status-dot"></span>
+
+                Monitoring Active
+
+                <button id="themeBtn">
+
+                    🌙 Dark Mode
+
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- ======================
+              METRIC CARDS
+        ======================= -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h3>CPU Usage</h3>
+
+                <h1 id="cpu">0%</h1>
+
+                <p>Processor Utilization</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Memory Usage</h3>
+
+                <h1 id="memory">0%</h1>
+
+                <p>RAM Utilization</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Disk Usage</h3>
+
+                <h1 id="disk">0%</h1>
+
+                <p>Storage Utilization</p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Processes</h3>
+
+                <h1 id="processes">0</h1>
+
+                <p>Running Processes</p>
+
+            </div>
+
+        </section>
+
+        <!-- ======================
+             STATUS PANELS
+        ======================= -->
+
+        <section class="status-grid">
+
+            <div class="status-card">
+
+                <h2>
+
+                    🟢 System Health
+
+                </h2>
+
+                <h3 id="health">
+
+                    Healthy
+
+                </h3>
+
+                <p>
+
+                    Overall machine health.
+
+                </p>
+
+            </div>
+
+            <div class="status-card">
+
+                <h2>
+
+                    🤖 AI Status
+
+                </h2>
+
+                <h3 id="aiStatus">
+
+                    Model Not Trained
+
+                </h3>
+
+                <p>
+
+                    Isolation Forest Result
+
+                </p>
+
+            </div>
+
+            <div class="status-card">
+
+                <h2>
+
+                    🔮 Failure Prediction
+
+                </h2>
+
+                <h3 id="prediction">
+
+                    No Failure Predicted
+
+                </h3>
+
+                <p>
+
+                    AI Prediction Engine
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ======================
+                ALERT PANEL
+        ======================= -->
+
+        <section class="alert-panel">
+
+            <div class="panel-title">
+
+                🚨 Active Alerts
+
+            </div>
+
+            <ul id="alerts">
+
+                <li>
+
+                    ✅ No Active Alerts
+
+                </li>
+
+            </ul>
+
+        </section>
+
+        <!-- ======================
+                CHARTS
+        ======================= -->
+
+        <section class="graphs">
+
+            <div class="graph-card">
+
+                <h2>
+
+                    CPU Usage Trend
+
+                </h2>
+
+                <div id="cpuChart"></div>
+
+            </div>
+
+            <div class="graph-card">
+
+                <h2>
+
+                    Memory Usage Trend
+
+                </h2>
+
+                <div id="memoryChart"></div>
+
+            </div>
+
+        </section>
+
+        <section class="graphs">
+
+            <div class="graph-card">
+
+                <h2>
+
+                    Disk Usage Trend
+
+                </h2>
+
+                <div id="diskChart"></div>
+
+            </div>
+
+            <div class="graph-card">
+
+                <h2>
+
+                    Network Activity
+
+                </h2>
+
+                <div id="networkChart"></div>
+
+            </div>
+
+        </section>
+
+                <!-- ======================
+             RECENT METRICS
+        ======================= -->
+
+        <section class="table-section">
+
+            <div class="table-card">
+
+                <h2>📊 Recent Metrics</h2>
+
+                <table id="metricsTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Time</th>
+                            <th>CPU</th>
+                            <th>Memory</th>
+                            <th>Disk</th>
+                            <th>Processes</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- ======================
+             INCIDENT TIMELINE
+        ======================= -->
+
+        <section class="table-section">
+
+            <div class="table-card">
+
+                <h2>📜 Incident Timeline</h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Time</th>
+
+                            <th>Incident</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="incidentTable">
+
+                        <tr>
+
+                            <td>--</td>
+
+                            <td>No incidents detected</td>
+
+                            <td>✅ Stable</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- ======================
+             FOOTER
+        ======================= -->
+
+        <footer class="footer">
+
+            <div>
+
+                <strong>AutoHeal-AI</strong>
+
+            </div>
+
+            <div>
+
+                AI Powered Predictive Monitoring &
+                Autonomous Self-Healing System
+
+            </div>
+
+            <div>
+
+                Version 1.0
+
+            </div>
+
+        </footer>
+
+    </main>
+
+    <!-- ======================
+         JAVASCRIPT
+    ======================= -->
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>

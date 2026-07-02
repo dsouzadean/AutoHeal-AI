@@ -1,2 +1,10 @@
-""" cpu_monitor.py """
+"""
+CPU Monitoring
+"""
 
+import psutil
+
+
+def get_cpu_usage():
+
+    return psutil.cpu_percent(interval=1)

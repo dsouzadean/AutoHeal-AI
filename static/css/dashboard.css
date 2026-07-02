@@ -1,1 +1,706 @@
-/* dashboard.css */
+/* =====================================================
+   AutoHeal-AI Dashboard
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    background:#eef3f8;
+    color:#333;
+    overflow-x:hidden;
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:250px;
+
+    height:100vh;
+
+    background:#1f2937;
+
+    color:white;
+
+    padding:30px 20px;
+
+    box-shadow:3px 0 15px rgba(0,0,0,.15);
+
+    z-index:1000;
+
+}
+
+.logo{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+}
+
+.logo h2{
+
+    color:#60a5fa;
+
+    margin-bottom:8px;
+
+}
+
+.logo p{
+
+    color:#cbd5e1;
+
+    font-size:14px;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar li{
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+    font-weight:500;
+
+}
+
+.sidebar li:hover{
+
+    background:#374151;
+
+}
+
+.sidebar li.active{
+
+    background:#2563eb;
+
+}
+
+/* ================= Main ================= */
+
+.main{
+
+    margin-left:250px;
+
+    width:calc(100% - 250px);
+
+    min-height:100vh;
+
+    padding:35px;
+
+}
+
+/* ================= Top Bar ================= */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:35px;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
+}
+
+.topbar h1{
+
+    color:#1e3a8a;
+
+    margin-bottom:8px;
+
+}
+
+.topbar p{
+
+    color:#666;
+
+}
+
+.top-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.status-dot{
+
+    width:12px;
+
+    height:12px;
+
+    background:#22c55e;
+
+    border-radius:50%;
+
+}
+
+/* ================= Theme Button ================= */
+
+#themeBtn{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#themeBtn:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ================= Metric Cards ================= */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.card h3{
+
+    color:#64748b;
+
+    margin-bottom:12px;
+
+}
+
+.card h1{
+
+    color:#2563eb;
+
+    font-size:38px;
+
+    margin-bottom:10px;
+
+}
+
+.card p{
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+/* ================= Status Grid ================= */
+
+.status-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.status-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.status-card h2{
+
+    margin-bottom:15px;
+
+    color:#334155;
+
+}
+
+.status-card h3{
+
+    font-size:26px;
+
+    margin-bottom:12px;
+
+    color:#2563eb;
+
+}
+
+.status-card p{
+
+    color:#777;
+
+    font-size:14px;
+
+}
+
+/* ================= Alerts ================= */
+
+.alert-panel{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    margin-bottom:35px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.panel-title{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:18px;
+
+    color:#334155;
+
+}
+
+.alert-panel ul{
+
+    padding-left:22px;
+
+}
+
+.alert-panel li{
+
+    margin-bottom:10px;
+
+}
+/* ================= Graph Section ================= */
+
+.graphs{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.graph-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.graph-card h2{
+
+    color:#334155;
+
+    margin-bottom:18px;
+
+}
+
+#cpuChart,
+#memoryChart,
+#diskChart,
+#networkChart{
+
+    width:100%;
+    height:320px;
+
+}
+
+/* ================= Tables ================= */
+
+.table-section{
+
+    margin-bottom:35px;
+
+}
+
+.table-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.table-card h2{
+
+    color:#334155;
+
+    margin-bottom:20px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+
+    border-radius:10px;
+
+}
+
+thead{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+th{
+
+    padding:16px;
+
+    text-align:center;
+
+    font-weight:600;
+
+}
+
+td{
+
+    padding:14px;
+
+    text-align:center;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+tbody tr:nth-child(even){
+
+    background:#f8fafc;
+
+}
+
+tbody tr:hover{
+
+    background:#e0f2fe;
+
+}
+
+/* ================= Footer ================= */
+
+.footer{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:25px;
+
+    margin-top:10px;
+
+    margin-bottom:20px;
+
+    text-align:center;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.footer div{
+
+    margin:8px 0;
+
+}
+
+.footer strong{
+
+    color:#2563eb;
+
+    font-size:20px;
+
+}
+
+/* ================= Dark Mode ================= */
+
+body.dark{
+
+    background:#111827;
+
+    color:#f3f4f6;
+
+}
+
+body.dark .main{
+
+    background:#111827;
+
+}
+
+body.dark .card,
+body.dark .status-card,
+body.dark .graph-card,
+body.dark .table-card,
+body.dark .alert-panel,
+body.dark .footer{
+
+    background:#1f2937;
+
+    color:#f3f4f6;
+
+}
+
+body.dark .card h3,
+body.dark .status-card h2,
+body.dark .graph-card h2,
+body.dark .table-card h2,
+body.dark .panel-title{
+
+    color:#f3f4f6;
+
+}
+
+body.dark .card p,
+body.dark .status-card p{
+
+    color:#d1d5db;
+
+}
+
+body.dark table{
+
+    color:white;
+
+}
+
+body.dark td{
+
+    border-color:#374151;
+
+}
+
+body.dark tbody tr:nth-child(even){
+
+    background:#273549;
+
+}
+
+body.dark tbody tr:hover{
+
+    background:#334155;
+
+}
+
+/* ================= Scrollbar ================= */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#94a3b8;
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#64748b;
+
+}
+
+/* ================= Responsive ================= */
+
+@media (max-width:1200px){
+
+    .cards{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .status-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .graphs{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:900px){
+
+    .sidebar{
+
+        width:220px;
+
+    }
+
+    .main{
+
+        margin-left:220px;
+
+        width:calc(100% - 220px);
+
+        padding:25px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .sidebar{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+    }
+
+    .main{
+
+        width:100%;
+
+        margin-left:0;
+
+        padding:20px;
+
+    }
+
+    .topbar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .top-right{
+
+        width:100%;
+
+        justify-content:space-between;
+
+    }
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .status-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .graphs{
+
+        grid-template-columns:1fr;
+
+    }
+
+    table{
+
+        display:block;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+
+    }
+
+}

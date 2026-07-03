@@ -23,7 +23,10 @@ let graphsInitialized = false;
 async function refreshDashboard() {
 
     await loadMetrics();
+
     await loadHistory();
+
+    await loadRecoveryHistory();
 
 }
 
@@ -109,6 +112,29 @@ async function loadMetrics() {
             ai.style.color = "#f59e0b";
 
         }
+
+        // ===============================
+// AI Details (Safe)
+// ===============================
+
+const confidence = document.getElementById("confidence");
+if (confidence && data.score !== undefined) {
+    confidence.innerHTML = (Math.abs(data.score) * 100).toFixed(1) + "%";
+}
+
+const rootCause = document.getElementById("rootCause");
+if (rootCause) {
+    rootCause.innerHTML =
+        data.root_cause || "System Operating Normally";
+}
+
+const recommendedAction =
+    document.getElementById("recommendedAction");
+
+if (recommendedAction) {
+    recommendedAction.innerHTML =
+        data.recommended_action || "No Action Required";
+}
 
         // ===============================
         // Prediction
@@ -382,6 +408,189 @@ async function loadHistory() {
 }
 
 // ===============================
+// Load Recovery History
+// ===============================
+
+async function loadRecoveryHistory() {
+
+    try {
+
+        const response = await fetch("/api/recovery-history");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch recovery history");
+        }
+
+        const history = await response.json();
+
+        const tbody = document.querySelector("#recoveryTable tbody");
+
+        tbody.innerHTML = "";
+
+        if (history.length === 0) {
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        No recovery actions yet.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+        history.forEach(row => {
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${row.time}</td>
+                    <td>${row.problem}</td>
+                    <td>${row.action}</td>
+                    <td>${row.status}</td>
+                </tr>
+            `;
+
+        });
+
+    }
+
+    catch (err) {
+
+        console.error("Recovery History Error:", err);
+
+    }
+
+}
+
+// ===============================
+// Recovery Controls
+// ===============================
+
+async function updateRecoveryStatus() {
+
+    try {
+
+        const response = await fetch("/api/recovery-status");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch recovery status");
+        }
+
+        const data = await response.json();
+
+        const status =
+            document.getElementById("autoRecoveryStatus");
+
+        const button =
+            document.getElementById("toggleRecoveryBtn");
+
+        if (!status || !button) {
+            return;
+        }
+
+        if (data.enabled) {
+
+            status.textContent = "🟢 ON";
+
+            status.style.color = "#16a34a";
+
+            button.textContent = "Disable Auto Recovery";
+
+        }
+
+        else {
+
+            status.textContent = "🔴 OFF";
+
+            status.style.color = "#dc2626";
+
+            button.textContent = "Enable Auto Recovery";
+
+        }
+
+    }
+
+    catch (err) {
+
+        console.error("Recovery Status Error:", err);
+
+    }
+
+}
+
+async function toggleRecovery() {
+
+    try {
+
+        const response = await fetch("/api/toggle-recovery", {
+
+            method: "POST"
+
+        });
+
+        if (!response.ok) {
+            throw new Error("Unable to toggle recovery");
+        }
+
+        await updateRecoveryStatus();
+
+    }
+
+    catch (err) {
+
+        console.error("Toggle Recovery Error:", err);
+
+    }
+
+}
+
+// ===============================
+// Manual Recovery
+// ===============================
+
+async function runManualRecovery() {
+
+    try {
+
+        const response = await fetch("/api/manual-recovery", {
+
+            method: "POST"
+
+        });
+
+        if (!response.ok) {
+
+            throw new Error("Manual recovery failed");
+
+        }
+
+        const result = await response.json();
+
+        alert(
+            "Recovery Completed!\n\n" +
+            "Problem: " + result.problem +
+            "\nAction: " + result.action +
+            "\nStatus: " + result.status
+        );
+
+        // Refresh dashboard data
+        await refreshDashboard();
+        await loadRecoveryHistory();
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        alert("Recovery Failed.");
+
+    }
+
+}
+
+// ===============================
 // Dark Mode
 // ===============================
 
@@ -411,12 +620,41 @@ if (themeBtn) {
 // Auto Refresh
 // ===============================
 
-refreshDashboard();
-
-setInterval(() => {
+document.addEventListener("DOMContentLoaded", () => {
 
     refreshDashboard();
 
-}, 5000);
+    updateRecoveryStatus();
 
-console.log("✅ Dashboard Loaded");
+    const button =
+        document.getElementById("toggleRecoveryBtn");
+
+    if (button) {
+
+        button.addEventListener(
+            "click",
+            toggleRecovery
+        );
+
+    }
+    const manualButton =
+    document.getElementById("manualRecoveryBtn");
+
+if (manualButton) {
+
+    manualButton.addEventListener(
+        "click",
+        runManualRecovery
+    );
+
+}
+
+    setInterval(() => {
+
+        refreshDashboard();
+
+        updateRecoveryStatus();
+
+    }, 5000);
+
+});

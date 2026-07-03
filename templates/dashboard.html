@@ -36,29 +36,17 @@
 
             <ul>
 
-                <li class="active">
-                    🏠 Dashboard
-                </li>
+                <li class="active">🏠 Dashboard</li>
 
-                <li>
-                    📈 Monitoring
-                </li>
+                <li>📈 Monitoring</li>
 
-                <li>
-                    🤖 AI Analysis
-                </li>
+                <li>🤖 AI Analysis</li>
 
-                <li>
-                    🚨 Incidents
-                </li>
+                <li>🚨 Incidents</li>
 
-                <li>
-                    📊 Reports
-                </li>
+                <li>📊 Reports</li>
 
-                <li>
-                    ⚙ Settings
-                </li>
+                <li>⚙ Settings</li>
 
             </ul>
 
@@ -91,12 +79,10 @@
 
                 <span class="status-dot"></span>
 
-                Monitoring Active
+                <span>Monitoring Active</span>
 
                 <button id="themeBtn">
-
                     🌙 Dark Mode
-
                 </button>
 
             </div>
@@ -152,73 +138,70 @@
         </section>
 
         <!-- ======================
-             STATUS PANELS
+              STATUS PANELS
         ======================= -->
 
         <section class="status-grid">
 
             <div class="status-card">
 
-                <h2>
-
-                    🟢 System Health
-
-                </h2>
+                <h2>🟢 System Health</h2>
 
                 <h3 id="health">
-
                     Healthy
-
                 </h3>
 
                 <p>
-
                     Overall machine health.
-
                 </p>
 
             </div>
+                        <div class="status-card">
 
-            <div class="status-card">
+                <h2>🤖 AI Analysis</h2>
 
-                <h2>
-
-                    🤖 AI Status
-
-                </h2>
+                <p><strong>Status</strong></p>
 
                 <h3 id="aiStatus">
-
                     Model Not Trained
-
                 </h3>
 
-                <p>
+                <hr>
 
-                    Isolation Forest Result
+                <p><strong>Confidence</strong></p>
 
+                <h3 id="confidence">
+                    0%
+                </h3>
+
+                <hr>
+
+                <p><strong>Root Cause</strong></p>
+
+                <p id="rootCause">
+                    Waiting for analysis...
+                </p>
+
+                <hr>
+
+                <p><strong>Recommended Action</strong></p>
+
+                <p id="recommendedAction">
+                    Waiting...
                 </p>
 
             </div>
 
             <div class="status-card">
 
-                <h2>
-
-                    🔮 Failure Prediction
-
-                </h2>
+                <h2>🔮 Failure Prediction</h2>
 
                 <h3 id="prediction">
-
                     No Failure Predicted
-
                 </h3>
 
                 <p>
-
                     AI Prediction Engine
-
                 </p>
 
             </div>
@@ -226,7 +209,7 @@
         </section>
 
         <!-- ======================
-                ALERT PANEL
+              ACTIVE ALERTS
         ======================= -->
 
         <section class="alert-panel">
@@ -240,9 +223,7 @@
             <ul id="alerts">
 
                 <li>
-
                     ✅ No Active Alerts
-
                 </li>
 
             </ul>
@@ -250,18 +231,14 @@
         </section>
 
         <!-- ======================
-                CHARTS
+              LIVE CHARTS
         ======================= -->
 
         <section class="graphs">
 
             <div class="graph-card">
 
-                <h2>
-
-                    CPU Usage Trend
-
-                </h2>
+                <h2>CPU Usage Trend</h2>
 
                 <div id="cpuChart"></div>
 
@@ -269,11 +246,7 @@
 
             <div class="graph-card">
 
-                <h2>
-
-                    Memory Usage Trend
-
-                </h2>
+                <h2>Memory Usage Trend</h2>
 
                 <div id="memoryChart"></div>
 
@@ -285,11 +258,7 @@
 
             <div class="graph-card">
 
-                <h2>
-
-                    Disk Usage Trend
-
-                </h2>
+                <h2>Disk Usage Trend</h2>
 
                 <div id="diskChart"></div>
 
@@ -297,11 +266,7 @@
 
             <div class="graph-card">
 
-                <h2>
-
-                    Network Activity
-
-                </h2>
+                <h2>Network Activity</h2>
 
                 <div id="networkChart"></div>
 
@@ -310,7 +275,7 @@
         </section>
 
                 <!-- ======================
-             RECENT METRICS
+              RECENT METRICS
         ======================= -->
 
         <section class="table-section">
@@ -346,7 +311,7 @@
         </section>
 
         <!-- ======================
-             INCIDENT TIMELINE
+              INCIDENT TIMELINE
         ======================= -->
 
         <section class="table-section">
@@ -362,9 +327,7 @@
                         <tr>
 
                             <th>Time</th>
-
                             <th>Incident</th>
-
                             <th>Status</th>
 
                         </tr>
@@ -376,9 +339,7 @@
                         <tr>
 
                             <td>--</td>
-
                             <td>No incidents detected</td>
-
                             <td>✅ Stable</td>
 
                         </tr>
@@ -392,7 +353,79 @@
         </section>
 
         <!-- ======================
-             FOOTER
+     RECOVERY CONTROLS
+====================== -->
+
+<section class="cards">
+
+    <div class="card">
+
+        <h3>⚙ Recovery Controls</h3>
+
+        <p>
+            Auto Recovery:
+            <span id="autoRecoveryStatus">ON</span>
+        </p>
+
+        <button id="toggleRecoveryBtn">
+            Disable Auto Recovery
+        </button>
+
+        <br><br>
+
+        <button id="manualRecoveryBtn">
+            ▶ Run Recovery Now
+        </button>
+
+    </div>
+
+</section>
+
+        <!-- ======================
+     RECOVERY HISTORY
+====================== -->
+
+<section class="table-section">
+
+    <div class="table-card">
+
+        <h2>🛠 Recovery History</h2>
+
+        <table id="recoveryTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Time</th>
+                    <th>Problem</th>
+                    <th>Recovery Action</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="4">
+                        No recovery actions yet.
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+        <!-- ======================
+              FOOTER
         ======================= -->
 
         <footer class="footer">
@@ -419,10 +452,6 @@
         </footer>
 
     </main>
-
-    <!-- ======================
-         JAVASCRIPT
-    ======================= -->
 
     <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 

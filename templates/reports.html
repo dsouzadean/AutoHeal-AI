@@ -1,1 +1,122 @@
-<!-- reports.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reports</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">
+<h2>🤖 AutoHeal-AI</h2>
+<p>Predict • Heal • Learn</p>
+</div>
+
+<nav>
+
+<ul>
+
+<li onclick="location.href='/dashboard'">🏠 Dashboard</li>
+
+<li onclick="location.href='/monitoring'">📈 Monitoring</li>
+
+<li onclick="location.href='/ai-analysis'">🤖 AI Analysis</li>
+
+<li onclick="location.href='/incidents'">🚨 Incidents</li>
+
+<li class="active">📊 Reports</li>
+
+<li onclick="location.href='/settings'">⚙ Settings</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+<div>
+
+<h1>📊 System Reports</h1>
+
+<p>Overall statistics collected from your system.</p>
+
+</div>
+
+</header>
+
+<section class="cards">
+
+<div class="card">
+<h3>Average CPU</h3>
+<h1 id="avgCPU">0%</h1>
+</div>
+
+<div class="card">
+<h3>Average Memory</h3>
+<h1 id="avgMemory">0%</h1>
+</div>
+
+<div class="card">
+<h3>Average Disk</h3>
+<h1 id="avgDisk">0%</h1>
+</div>
+
+<div class="card">
+<h3>Total Records</h3>
+<h1 id="records">0</h1>
+</div>
+
+</section>
+
+<section class="table-section">
+
+<div class="table-card">
+
+<h2>System Summary</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Metric</th>
+
+<th>Value</th>
+
+</tr>
+
+</thead>
+
+<tbody id="summaryTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+
+</body>
+
+</html>

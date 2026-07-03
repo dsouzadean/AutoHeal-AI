@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="logo">
+        <h2>🤖 AutoHeal-AI</h2>
+        <p>Predict • Heal • Learn</p>
+    </div>
+
+    <nav>
+
+        <ul>
+
+            <li onclick="window.location.href='/dashboard'">
+                🏠 Dashboard
+            </li>
+
+            <li onclick="window.location.href='/monitoring'">
+                📈 Monitoring
+            </li>
+
+            <li class="active">
+                🤖 AI Analysis
+            </li>
+
+            <li onclick="window.location.href='/incidents'">
+                🚨 Incidents
+            </li>
+
+            <li onclick="window.location.href='/reports'">
+                📊 Reports
+            </li>
+
+            <li onclick="window.location.href='/settings'">
+                ⚙ Settings
+            </li>
+
+        </ul>
+
+    </nav>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+    <h1>🤖 AI Analysis Engine</h1>
+
+    <p>Live anomaly detection and root cause analysis.</p>
+
+</header>
+
+<section class="cards">
+
+    <div class="card">
+        <h3>AI Status</h3>
+        <h1 id="aiStatus">Loading...</h1>
+    </div>
+
+    <div class="card">
+        <h3>Confidence</h3>
+        <h1 id="confidence">0%</h1>
+    </div>
+
+</section>
+
+<section class="status-grid">
+
+    <div class="status-card">
+
+        <h2>Root Cause</h2>
+
+        <h3 id="rootCause">
+            Waiting...
+        </h3>
+
+    </div>
+
+    <div class="status-card">
+
+        <h2>Recommended Action</h2>
+
+        <h3 id="recommendedAction">
+            Waiting...
+        </h3>
+
+    </div>
+
+</section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/ai_analysis.js') }}"></script>
+
+</body>
+
+</html>

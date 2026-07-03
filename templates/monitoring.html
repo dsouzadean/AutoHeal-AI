@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Monitoring</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>🤖 AutoHeal-AI</h2>
+
+            <p>Predict • Heal • Learn</p>
+
+        </div>
+
+        <nav>
+
+            <ul>
+
+                <li onclick="window.location.href='/dashboard'">
+                    🏠 Dashboard
+                </li>
+
+                <li class="active">
+                    📈 Monitoring
+                </li>
+
+                <li onclick="window.location.href='/ai-analysis'">
+                    🤖 AI Analysis
+                </li>
+
+                <li onclick="window.location.href='/incidents'">
+                    🚨 Incidents
+                </li>
+
+                <li onclick="window.location.href='/reports'">
+                    📊 Reports
+                </li>
+
+                <li onclick="window.location.href='/settings'">
+                    ⚙ Settings
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <h1>📈 Live Monitoring</h1>
+
+            <p>Detailed real-time monitoring of system resources.</p>
+
+        </header>
+
+        <section class="graphs">
+
+            <div class="graph-card">
+
+                <h2>CPU Usage</h2>
+
+                <div id="cpuChart"></div>
+
+            </div>
+
+            <div class="graph-card">
+
+                <h2>Memory Usage</h2>
+
+                <div id="memoryChart"></div>
+
+            </div>
+
+        </section>
+
+        <section class="graphs">
+
+            <div class="graph-card">
+
+                <h2>Disk Usage</h2>
+
+                <div id="diskChart"></div>
+
+            </div>
+
+            <div class="graph-card">
+
+                <h2>Network Activity</h2>
+
+                <div id="networkChart"></div>
+
+            </div>
+
+        </section>
+        <!-- ======================
+     SYSTEM INFORMATION
+====================== -->
+
+<section class="table-section">
+
+    <div class="table-card">
+
+        <h2>💻 System Information</h2>
+
+        <table>
+
+            <tbody>
+
+                <tr>
+                    <td><strong>Operating System</strong></td>
+                    <td id="os">Loading...</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Hostname</strong></td>
+                    <td id="hostname">Loading...</td>
+                </tr>
+
+                <tr>
+                    <td><strong>CPU Cores</strong></td>
+                    <td id="cpuCores">Loading...</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Total RAM</strong></td>
+                    <td id="totalRam">Loading...</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Total Disk</strong></td>
+                    <td id="totalDisk">Loading...</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+    </main>
+
+    <<script src="{{ url_for('static', filename='js/monitoring.js') }}"></script>
+
+</body>
+
+</html>

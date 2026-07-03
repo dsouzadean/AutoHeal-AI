@@ -1,1 +1,184 @@
-<!-- settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Settings</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<h2>🤖 AutoHeal-AI</h2>
+
+<p>Predict • Heal • Learn</p>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li onclick="location.href='/dashboard'">
+🏠 Dashboard
+</li>
+
+<li onclick="location.href='/monitoring'">
+📈 Monitoring
+</li>
+
+<li onclick="location.href='/ai-analysis'">
+🤖 AI Analysis
+</li>
+
+<li onclick="location.href='/incidents'">
+🚨 Incidents
+</li>
+
+<li onclick="location.href='/reports'">
+📊 Reports
+</li>
+
+<li class="active">
+⚙ Settings
+</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+<div>
+
+<h1>⚙ System Settings</h1>
+
+<p>Configure AutoHeal-AI preferences</p>
+
+</div>
+
+</header>
+
+<section class="cards">
+
+<div class="card">
+
+<h3>Auto Recovery</h3>
+
+<p id="autoRecoveryStatus">
+Loading...
+</p>
+
+<button id="toggleRecoveryBtn">
+Toggle Auto Recovery
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Dashboard Refresh</h3>
+
+<select id="refreshInterval">
+
+<option value="2">2 Seconds</option>
+
+<option value="5" selected>5 Seconds</option>
+
+<option value="10">10 Seconds</option>
+
+<option value="30">30 Seconds</option>
+
+</select>
+
+</div>
+
+<div class="card">
+
+<h3>CPU Alert Threshold</h3>
+
+<input
+type="number"
+id="cpuThreshold"
+value="85"
+min="1"
+max="100">
+
+</div>
+
+<div class="card">
+
+<h3>Memory Alert Threshold</h3>
+
+<input
+type="number"
+id="memoryThreshold"
+value="85"
+min="1"
+max="100">
+
+</div>
+
+</section>
+
+<section class="table-section">
+
+<div class="table-card">
+
+<h2>Current Configuration</h2>
+
+<table>
+
+<tbody>
+
+<tr>
+<td>Auto Recovery</td>
+<td id="configRecovery">Loading...</td>
+</tr>
+
+<tr>
+<td>Dashboard Refresh</td>
+<td id="configRefresh">5 Seconds</td>
+</tr>
+
+<tr>
+<td>CPU Threshold</td>
+<td id="configCPU">85%</td>
+</tr>
+
+<tr>
+<td>Memory Threshold</td>
+<td id="configMemory">85%</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+
+</html>

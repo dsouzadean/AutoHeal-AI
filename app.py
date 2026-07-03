@@ -41,6 +41,38 @@ app.register_blueprint(api)
 def dashboard():
     return render_template("dashboard.html")
 
+# ===============================
+# Additional Pages
+# ===============================
+
+@app.route("/dashboard")
+def dashboard_page():
+    return render_template("dashboard.html")
+
+
+@app.route("/monitoring")
+def monitoring():
+    return render_template("monitoring.html")
+
+
+@app.route("/ai-analysis")
+def ai_analysis():
+    return render_template("ai_analysis.html")
+
+
+@app.route("/incidents")
+def incidents():
+    return render_template("incidents.html")
+
+
+@app.route("/reports")
+def reports():
+    return render_template("reports.html")
+
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html")
 
 @app.route("/api/metrics")
 def metrics():
@@ -83,10 +115,9 @@ def metrics():
         else:
 
             data["recovery_status"] = "Waiting"
-
             data["recovery_action"] = "Manual Recovery Required"
 
-        return jsonify(data)
+    return jsonify(data)
     
 @app.route("/api/recovery-status")
 def recovery_status():

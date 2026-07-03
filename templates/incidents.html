@@ -1,1 +1,127 @@
-<!-- incidents.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Incidents</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="logo">
+
+<h2>🤖 AutoHeal-AI</h2>
+
+<p>Predict • Heal • Learn</p>
+
+</div>
+
+<nav>
+
+<ul>
+
+<li onclick="location.href='/dashboard'">
+🏠 Dashboard
+</li>
+
+<li onclick="location.href='/monitoring'">
+📈 Monitoring
+</li>
+
+<li onclick="location.href='/ai-analysis'">
+🤖 AI Analysis
+</li>
+
+<li class="active">
+🚨 Incidents
+</li>
+
+<li onclick="location.href='/reports'">
+📊 Reports
+</li>
+
+<li onclick="location.href='/settings'">
+⚙ Settings
+</li>
+
+</ul>
+
+</nav>
+
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+
+<div>
+
+<h1>🚨 Incident History</h1>
+
+<p>Every anomaly detected by AutoHeal-AI</p>
+
+</div>
+
+</header>
+
+<section class="table-section">
+
+<div class="table-card">
+
+<h2>Incident Log</h2>
+
+<table id="incidentTable">
+
+<thead>
+
+<tr>
+
+<th>Time</th>
+
+<th>Status</th>
+
+<th>Root Cause</th>
+
+<th>Recommended Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td colspan="4">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
+
+</body>
+
+</html>

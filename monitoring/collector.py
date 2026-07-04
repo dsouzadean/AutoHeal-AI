@@ -2,6 +2,11 @@
 Collect all system metrics
 """
 
+import time
+import platform
+import socket
+import psutil
+
 from monitoring.cpu_monitor import get_cpu_usage
 from monitoring.memory_monitor import get_memory_usage
 from monitoring.disk_monitor import get_disk_usage
@@ -9,12 +14,26 @@ from monitoring.network_monitor import get_network_usage
 from monitoring.process_monitor import get_process_count
 from monitoring.process_analyzer import get_top_process
 
-import platform
-import socket
-import psutil
+
+# =====================================
+# Metrics Cache
+# =====================================
+
+CACHE = None
+LAST_UPDATE = 0
+CACHE_DURATION = 2  # seconds
 
 
 def collect_metrics():
+
+    global CACHE
+    global LAST_UPDATE
+
+    current_time = time.time()
+
+    # Return cached metrics if they are still fresh
+    if CACHE is not None and (current_time - LAST_UPDATE) < CACHE_DURATION:
+        return CACHE
 
     network = get_network_usage()
     top_process = get_top_process()
@@ -74,7 +93,12 @@ def collect_metrics():
             top_process["cpu_percent"],
             2
         )
-
     }
+        # =====================================
+    # Update Cache
+    # =====================================
+
+    CACHE = data
+    LAST_UPDATE = current_time
 
     return data

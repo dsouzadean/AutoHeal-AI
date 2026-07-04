@@ -5,14 +5,23 @@ Database Models
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import Column, Integer, Float, String, DateTime
+from sqlalchemy import (
+    Column,
+    Integer,
+    Float,
+    String,
+    DateTime
+)
 
 from database.database import Base
-
 
 # Indian Standard Time
 IST = ZoneInfo("Asia/Kolkata")
 
+
+# ==========================================
+# System Metrics
+# ==========================================
 
 class SystemMetrics(Base):
 
@@ -26,14 +35,21 @@ class SystemMetrics(Base):
     )
 
     cpu = Column(Float)
+
     memory = Column(Float)
+
     disk = Column(Float)
 
     network_sent = Column(Float)
+
     network_received = Column(Float)
 
     processes = Column(Integer)
 
+
+# ==========================================
+# Incident History
+# ==========================================
 
 class Incident(Base):
 
@@ -47,13 +63,19 @@ class Incident(Base):
     )
 
     prediction = Column(String)
+
     confidence = Column(Float)
 
     root_cause = Column(String)
+
     action = Column(String)
 
     status = Column(String)
 
+
+# ==========================================
+# Recovery History
+# ==========================================
 
 class RecoveryLog(Base):
 
@@ -67,5 +89,13 @@ class RecoveryLog(Base):
     )
 
     problem = Column(String)
+
     action = Column(String)
+
     status = Column(String)
+
+    process = Column(String)
+
+    pid = Column(Integer)
+
+    duration = Column(Float)

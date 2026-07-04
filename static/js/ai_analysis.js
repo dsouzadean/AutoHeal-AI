@@ -1,3 +1,7 @@
+// ==========================================
+// AI Analysis Page
+// ==========================================
+
 async function loadAI() {
 
     try {
@@ -6,28 +10,52 @@ async function loadAI() {
 
         const data = await response.json();
 
-        document.getElementById("aiStatus").innerHTML =
+        // ===============================
+        // AI Status
+        // ===============================
+
+        document.getElementById("aiStatus").textContent =
             data.ai_status;
 
-        document.getElementById("confidence").innerHTML =
-            (Math.abs(data.score) * 100).toFixed(1) + "%";
+        document.getElementById("confidence").textContent =
+            data.confidence + "%";
 
-        document.getElementById("rootCause").innerHTML =
+        document.getElementById("rootCause").textContent =
             data.root_cause;
 
-        document.getElementById("recommendedAction").innerHTML =
+        document.getElementById("recommendedAction").textContent =
             data.recommended_action;
+
+        // ===============================
+        // Process Analysis
+        // ===============================
+
+        document.getElementById("suspectProcess").textContent =
+            data.suspect_process;
+
+        document.getElementById("suspectPid").textContent =
+            data.pid;
+
+        document.getElementById("processMemory").textContent =
+            data.top_memory + "%";
+
+        document.getElementById("processCpu").textContent =
+            data.top_cpu + "%";
 
     }
 
     catch (err) {
 
-        console.log(err);
+        console.error("AI Analysis Error:", err);
 
     }
 
 }
 
-loadAI();
+document.addEventListener("DOMContentLoaded", () => {
 
-setInterval(loadAI, 5000);
+    loadAI();
+
+    setInterval(loadAI, 5000);
+
+});

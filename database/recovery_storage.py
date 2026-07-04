@@ -14,14 +14,24 @@ def initialize_recovery_table():
     pass
 
 
-def save_recovery(problem, action, status):
+def save_recovery(
+    problem,
+    action,
+    status,
+    process="Unknown",
+    pid=0,
+    duration=0.0
+):
 
     session = SessionLocal()
 
     recovery = RecoveryLog(
         problem=problem,
         action=action,
-        status=status
+        status=status,
+        process=process,
+        pid=pid,
+        duration=duration
     )
 
     session.add(recovery)
@@ -48,8 +58,17 @@ def get_recovery_logs(limit=20):
 
             "id": row.id,
             "time": row.timestamp.strftime("%d %b %Y %I:%M:%S %p"),
+
             "problem": row.problem,
+
             "action": row.action,
+
+            "process": row.process,
+
+            "pid": row.pid,
+
+            "duration": row.duration,
+
             "status": row.status
 
         })

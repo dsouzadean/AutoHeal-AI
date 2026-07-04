@@ -22,11 +22,8 @@ let graphsInitialized = false;
 
 async function refreshDashboard() {
 
+    // Refresh only live metrics
     await loadMetrics();
-
-    await loadHistory();
-
-    await loadRecoveryHistory();
 
 }
 
@@ -40,42 +37,47 @@ async function loadMetrics() {
 
         const response = await fetch("/api/metrics");
 
+        if (!response.ok) {
+            throw new Error("Unable to fetch metrics");
+        }
+
         const data = await response.json();
 
         // ===============================
-        // Update Cards
+        // Dashboard Cards
         // ===============================
 
-        document.getElementById("cpu").innerHTML =
-            data.cpu.toFixed(1) + "%";
+        document.getElementById("cpu").textContent =
+            Number(data.cpu).toFixed(1) + "%";
 
-        document.getElementById("memory").innerHTML =
-            data.memory.toFixed(1) + "%";
+        document.getElementById("memory").textContent =
+            Number(data.memory).toFixed(1) + "%";
 
-        document.getElementById("disk").innerHTML =
-            data.disk.toFixed(1) + "%";
+        document.getElementById("disk").textContent =
+            Number(data.disk).toFixed(1) + "%";
 
-        document.getElementById("processes").innerHTML =
+        document.getElementById("processes").textContent =
             data.processes;
 
         // ===============================
         // System Health
         // ===============================
 
-        const health =
-            document.getElementById("health");
+        const health = document.getElementById("health");
 
-        if (data.cpu > 85 || data.memory > 85) {
+        if (health) {
 
-            health.innerHTML = "🔴 High Load";
-            health.style.color = "#dc2626";
+            if (data.cpu > 85 || data.memory > 85) {
 
-        }
+                health.textContent = "🔴 High Load";
+                health.style.color = "#dc2626";
 
-        else {
+            } else {
 
-            health.innerHTML = "🟢 Healthy";
-            health.style.color = "#16a34a";
+                health.textContent = "🟢 Healthy";
+                health.style.color = "#16a34a";
+
+            }
 
         }
 
@@ -83,58 +85,57 @@ async function loadMetrics() {
         // AI Status
         // ===============================
 
-        const ai =
-            document.getElementById("aiStatus");
+        const ai = document.getElementById("aiStatus");
 
-        if (data.ai_status === "Anomaly") {
+        if (ai) {
 
-            ai.innerHTML =
-                "🚨 Anomaly Detected";
+            if (data.ai_status === "Anomaly") {
 
-            ai.style.color = "#dc2626";
+                ai.textContent = "🚨 Anomaly Detected";
+                ai.style.color = "#dc2626";
 
-        }
+            } else {
 
-        else if (data.ai_status === "Normal") {
+                ai.textContent = "🤖 Normal";
+                ai.style.color = "#16a34a";
 
-            ai.innerHTML =
-                "🤖 Normal";
-
-            ai.style.color = "#16a34a";
-
-        }
-
-        else {
-
-            ai.innerHTML =
-                "⚠ Model Not Trained";
-
-            ai.style.color = "#f59e0b";
+            }
 
         }
 
         // ===============================
-// AI Details (Safe)
-// ===============================
+        // AI Details
+        // ===============================
 
-const confidence = document.getElementById("confidence");
-if (confidence && data.score !== undefined) {
-    confidence.innerHTML = (Math.abs(data.score) * 100).toFixed(1) + "%";
-}
+        const confidence =
+            document.getElementById("confidence");
 
-const rootCause = document.getElementById("rootCause");
-if (rootCause) {
-    rootCause.innerHTML =
-        data.root_cause || "System Operating Normally";
-}
+        if (confidence) {
 
-const recommendedAction =
-    document.getElementById("recommendedAction");
+            confidence.textContent =
+                data.confidence + "%";
 
-if (recommendedAction) {
-    recommendedAction.innerHTML =
-        data.recommended_action || "No Action Required";
-}
+        }
+
+        const rootCause =
+            document.getElementById("rootCause");
+
+        if (rootCause) {
+
+            rootCause.textContent =
+                data.root_cause;
+
+        }
+
+        const recommended =
+            document.getElementById("recommendedAction");
+
+        if (recommended) {
+
+            recommended.textContent =
+                data.recommended_action;
+
+        }
 
         // ===============================
         // Prediction
@@ -143,33 +144,34 @@ if (recommendedAction) {
         const prediction =
             document.getElementById("prediction");
 
-        if (data.cpu > 90) {
+        if (prediction) {
 
-            prediction.innerHTML =
-                "⚠ CPU Overload Possible";
+            if (data.cpu > 90) {
 
-            prediction.style.color =
-                "#dc2626";
+                prediction.textContent =
+                    "⚠ CPU Overload Possible";
 
-        }
+                prediction.style.color = "#dc2626";
 
-        else if (data.memory > 90) {
+            }
 
-            prediction.innerHTML =
-                "⚠ Memory Exhaustion Possible";
+            else if (data.memory > 90) {
 
-            prediction.style.color =
-                "#dc2626";
+                prediction.textContent =
+                    "⚠ Memory Exhaustion Possible";
 
-        }
+                prediction.style.color = "#dc2626";
 
-        else {
+            }
 
-            prediction.innerHTML =
-                "✅ No Failure Predicted";
+            else {
 
-            prediction.style.color =
-                "#16a34a";
+                prediction.textContent =
+                    "✅ No Failure Predicted";
+
+                prediction.style.color = "#16a34a";
+
+            }
 
         }
 
@@ -180,33 +182,21 @@ if (recommendedAction) {
         const alerts =
             document.getElementById("alerts");
 
-        alerts.innerHTML = "";
+        if (alerts) {
 
-        if (data.cpu > 85) {
+            alerts.innerHTML = "";
 
-            alerts.innerHTML +=
-                "<li>🔥 High CPU Usage</li>";
+            if (data.cpu > 85)
+                alerts.innerHTML += "<li>🔥 High CPU Usage</li>";
 
-        }
+            if (data.memory > 85)
+                alerts.innerHTML += "<li>💾 High Memory Usage</li>";
 
-        if (data.memory > 85) {
+            if (data.disk > 90)
+                alerts.innerHTML += "<li>📀 Disk Almost Full</li>";
 
-            alerts.innerHTML +=
-                "<li>💾 High Memory Usage</li>";
-
-        }
-
-        if (data.disk > 90) {
-
-            alerts.innerHTML +=
-                "<li>📀 Disk Almost Full</li>";
-
-        }
-
-        if (alerts.innerHTML === "") {
-
-            alerts.innerHTML =
-                "<li>✅ No Active Alerts</li>";
+            if (alerts.innerHTML === "")
+                alerts.innerHTML = "<li>✅ No Active Alerts</li>";
 
         }
 
@@ -218,16 +208,14 @@ if (recommendedAction) {
             new Date().toLocaleTimeString("en-IN")
         );
 
-        cpuHistory.push(data.cpu);
-
-        memoryHistory.push(data.memory);
-
-        diskHistory.push(data.disk);
+        cpuHistory.push(Number(data.cpu));
+        memoryHistory.push(Number(data.memory));
+        diskHistory.push(Number(data.disk));
 
         networkHistory.push(
             (
-                data.network_sent +
-                data.network_received
+                Number(data.network_sent) +
+                Number(data.network_received)
             ) / 1000000
         );
 
@@ -245,8 +233,6 @@ if (recommendedAction) {
 
         }
 
-        console.log("Points:", labels.length);
-
                 // ===============================
         // Initialize Charts
         // ===============================
@@ -262,13 +248,12 @@ if (recommendedAction) {
                     width: 3
                 },
                 marker: {
-                    size: 6
+                    size: 5
                 }
             }], {
                 title: "CPU Usage (%)",
-                margin: {
-                    t: 40
-                }
+                margin: { t: 40 },
+                responsive: true
             });
 
             Plotly.newPlot("memoryChart", [{
@@ -280,13 +265,12 @@ if (recommendedAction) {
                     width: 3
                 },
                 marker: {
-                    size: 6
+                    size: 5
                 }
             }], {
                 title: "Memory Usage (%)",
-                margin: {
-                    t: 40
-                }
+                margin: { t: 40 },
+                responsive: true
             });
 
             Plotly.newPlot("diskChart", [{
@@ -298,13 +282,12 @@ if (recommendedAction) {
                     width: 3
                 },
                 marker: {
-                    size: 6
+                    size: 5
                 }
             }], {
                 title: "Disk Usage (%)",
-                margin: {
-                    t: 40
-                }
+                margin: { t: 40 },
+                responsive: true
             });
 
             Plotly.newPlot("networkChart", [{
@@ -316,13 +299,12 @@ if (recommendedAction) {
                     width: 3
                 },
                 marker: {
-                    size: 6
+                    size: 5
                 }
             }], {
                 title: "Network Activity (MB)",
-                margin: {
-                    t: 40
-                }
+                margin: { t: 40 },
+                responsive: true
             });
 
             graphsInitialized = true;
@@ -367,6 +349,7 @@ if (recommendedAction) {
 
 }
 
+
 // ===============================
 // Load Metrics History
 // ===============================
@@ -376,13 +359,15 @@ async function loadHistory() {
     try {
 
         const response = await fetch("/history");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch history");
+        }
+
         const history = await response.json();
 
-        // ===============================
-        // Recent Metrics Table
-        // ===============================
-
-        const tbody = document.querySelector("#metricsTable tbody");
+        const tbody =
+            document.querySelector("#metricsTable tbody");
 
         if (tbody) {
 
@@ -405,10 +390,11 @@ async function loadHistory() {
         }
 
         // ===============================
-        // Dashboard Incident Timeline
+        // Incident Timeline
         // ===============================
 
-        const incidentBody = document.getElementById("incidentTable");
+        const incidentBody =
+            document.getElementById("incidentTable");
 
         if (incidentBody) {
 
@@ -429,12 +415,14 @@ async function loadHistory() {
                         status = "🚨 Alert";
 
                     }
+
                     else if (Number(row.memory) > 85) {
 
                         incident = "High Memory Usage";
                         status = "🚨 Alert";
 
                     }
+
                     else if (Number(row.disk) > 90) {
 
                         incident = "Disk Almost Full";
@@ -452,19 +440,6 @@ async function loadHistory() {
 
                 });
 
-            // Show a default row if there is no history
-            if (history.length === 0) {
-
-                incidentBody.innerHTML = `
-                    <tr>
-                        <td>--</td>
-                        <td>No incidents detected</td>
-                        <td>✅ Stable</td>
-                    </tr>
-                `;
-
-            }
-
         }
 
     }
@@ -476,7 +451,6 @@ async function loadHistory() {
     }
 
 }
-
 // ===============================
 // Load Recovery History
 // ===============================
@@ -493,7 +467,10 @@ async function loadRecoveryHistory() {
 
         const history = await response.json();
 
-        const tbody = document.querySelector("#recoveryTable tbody");
+        const tbody =
+            document.querySelector("#recoveryTable tbody");
+
+        if (!tbody) return;
 
         tbody.innerHTML = "";
 
@@ -501,7 +478,7 @@ async function loadRecoveryHistory() {
 
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="4">
+                    <td colspan="7">
                         No recovery actions yet.
                     </td>
                 </tr>
@@ -517,6 +494,9 @@ async function loadRecoveryHistory() {
                     <td>${row.time}</td>
                     <td>${row.problem}</td>
                     <td>${row.action}</td>
+                    <td>${row.process || "-"}</td>
+                    <td>${row.pid || "-"}</td>
+                    <td>${row.duration || 0}s</td>
                     <td>${row.status}</td>
                 </tr>
             `;
@@ -533,15 +513,17 @@ async function loadRecoveryHistory() {
 
 }
 
+
 // ===============================
-// Recovery Controls
+// Auto Recovery Status
 // ===============================
 
 async function updateRecoveryStatus() {
 
     try {
 
-        const response = await fetch("/api/recovery-status");
+        const response =
+            await fetch("/api/recovery-status");
 
         if (!response.ok) {
             throw new Error("Unable to fetch recovery status");
@@ -555,27 +537,25 @@ async function updateRecoveryStatus() {
         const button =
             document.getElementById("toggleRecoveryBtn");
 
-        if (!status || !button) {
-            return;
-        }
+        if (!status || !button) return;
 
         if (data.enabled) {
 
             status.textContent = "🟢 ON";
-
             status.style.color = "#16a34a";
 
-            button.textContent = "Disable Auto Recovery";
+            button.textContent =
+                "Disable Auto Recovery";
 
         }
 
         else {
 
             status.textContent = "🔴 OFF";
-
             status.style.color = "#dc2626";
 
-            button.textContent = "Enable Auto Recovery";
+            button.textContent =
+                "Enable Auto Recovery";
 
         }
 
@@ -589,18 +569,28 @@ async function updateRecoveryStatus() {
 
 }
 
+
+// ===============================
+// Toggle Auto Recovery
+// ===============================
+
 async function toggleRecovery() {
 
     try {
 
-        const response = await fetch("/api/toggle-recovery", {
+        const response =
+            await fetch("/api/toggle-recovery", {
 
-            method: "POST"
+                method: "POST"
 
-        });
+            });
 
         if (!response.ok) {
-            throw new Error("Unable to toggle recovery");
+
+            throw new Error(
+                "Unable to toggle recovery"
+            );
+
         }
 
         await updateRecoveryStatus();
@@ -609,11 +599,12 @@ async function toggleRecovery() {
 
     catch (err) {
 
-        console.error("Toggle Recovery Error:", err);
+        console.error(err);
 
     }
 
 }
+
 
 // ===============================
 // Manual Recovery
@@ -623,30 +614,40 @@ async function runManualRecovery() {
 
     try {
 
-        const response = await fetch("/api/manual-recovery", {
+        const response =
+            await fetch("/api/manual-recovery", {
 
-            method: "POST"
+                method: "POST"
 
-        });
+            });
 
         if (!response.ok) {
 
-            throw new Error("Manual recovery failed");
+            throw new Error(
+                "Manual recovery failed"
+            );
 
         }
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
-    alert(
-        "Recovery Completed!\n\n" +
-        "Problem: " + result.problem +
-        "\nAction: " + result.action +
-        "\nStatus: " + result.status +
-        "\nVerification: " + result.verification
-    );
+        alert(
 
-        // Refresh dashboard data
-        await refreshDashboard();
+            "Recovery Completed!\n\n" +
+
+            "Problem: " + result.problem +
+
+            "\nAction: " + result.action +
+
+            "\nStatus: " + result.status +
+
+            "\nVerification: " + result.verification
+
+        );
+
+        await loadMetrics();
+
         await loadRecoveryHistory();
 
     }
@@ -660,48 +661,73 @@ async function runManualRecovery() {
     }
 
 }
-
-
-
 // ===============================
-// Auto Refresh
+// Initialize Dashboard
 // ===============================
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    refreshDashboard();
+    // Load everything once
+    await loadMetrics();
+    await loadHistory();
+    await loadRecoveryHistory();
+    await updateRecoveryStatus();
 
-    updateRecoveryStatus();
-
-    const button =
+    // Button Events
+    const toggleButton =
         document.getElementById("toggleRecoveryBtn");
 
-    if (button) {
+    if (toggleButton) {
 
-        button.addEventListener(
+        toggleButton.addEventListener(
             "click",
             toggleRecovery
         );
 
     }
+
     const manualButton =
-    document.getElementById("manualRecoveryBtn");
+        document.getElementById("manualRecoveryBtn");
 
-if (manualButton) {
+    if (manualButton) {
 
-    manualButton.addEventListener(
-        "click",
-        runManualRecovery
-    );
+        manualButton.addEventListener(
+            "click",
+            runManualRecovery
+        );
 
-}
+    }
 
-    setInterval(() => {
+    // ======================================
+    // Fast Refresh (Live Metrics)
+    // ======================================
 
-        refreshDashboard();
+    setInterval(async () => {
 
-        updateRecoveryStatus();
+        await loadMetrics();
 
     }, 5000);
+
+    // ======================================
+    // Slow Refresh (History Tables)
+    // ======================================
+
+    setInterval(async () => {
+
+        await loadHistory();
+
+        await loadRecoveryHistory();
+
+    }, 30000);
+
+    // ======================================
+    // Recovery Status
+    // ======================================
+
+    setInterval(async () => {
+
+        await updateRecoveryStatus();
+
+    }, 10000);
 
 });

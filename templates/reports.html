@@ -59,11 +59,19 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
     <div class="top-right">
 
-        <button id="themeBtn">
-            🌙 Dark Mode
-        </button>
+    <button id="exportPDF" class="action-btn pdf-btn">
+        📄 Export PDF
+    </button>
 
-    </div>
+    <button id="exportCSV" class="action-btn csv-btn">
+        📊 Export CSV
+    </button>
+
+    <button id="themeBtn" class="action-btn theme-btn">
+        🌙 Dark Mode
+    </button>
+
+</div>
 
 </header>
 
@@ -124,6 +132,8 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 </main>
 
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 
 </body>

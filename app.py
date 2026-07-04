@@ -5,11 +5,11 @@ AutoHeal-AI Main Application
 import time
 
 from flask import Flask, jsonify, render_template, request
-
+from database.incident_storage import save_incident
 from database import initialize_database
 from database.metrics_storage import save_metrics
 from database.recovery_storage import initialize_recovery_table
-
+from notifications.email_alert import send_email_alert
 from monitoring.collector import collect_metrics
 
 from dashboard.api import api
@@ -37,7 +37,6 @@ app = Flask(__name__)
 
 LAST_SAVE = 0
 SAVE_INTERVAL = 30
-
 # =====================================
 # Initialize Database
 # =====================================
@@ -105,6 +104,7 @@ def metrics():
 
     data = collect_metrics()
 
+
     # ---------------------------------
     # Save Metrics Every 30 Seconds
     # ---------------------------------
@@ -121,17 +121,6 @@ def metrics():
     # ---------------------------------
 
     ai_result = detect_anomaly(data)
-
-    # Ignore AI false positives when
-    # the system metrics are healthy.
-    if (
-        ai_result["status"] == "Anomaly"
-        and data["cpu"] < 85
-        and data["memory"] < 85
-        and data["disk"] < 90
-    ):
-        ai_result["status"] = "Normal"
-        ai_result["prediction"] = 1
 
     data["ai_status"] = ai_result["status"]
     data["prediction"] = ai_result["prediction"]
@@ -171,8 +160,20 @@ def metrics():
         data["pid"] = root["pid"]
         data["confidence"] = root["confidence"]
 
-        # Only recover if a real issue exists
+        # ---------------------------------
+        # Save Incident
+        # ---------------------------------
+
+        # Save Incident (Only Once Per Incident)
         if root["root_cause"] != "System Operating Normally":
+
+            save_incident(
+                prediction="Anomaly",
+                confidence=root["confidence"],
+                root_cause=root["root_cause"],
+                action=root["recommended_action"],
+                status="Detected"
+            )
 
             if is_auto_recovery_enabled():
 
@@ -182,6 +183,12 @@ def metrics():
 
                 data["recovery_status"] = recovery["status"]
                 data["recovery_action"] = recovery["action"]
+                send_email_alert(
+                        root_cause=root["root_cause"],
+                        confidence=root["confidence"],
+                        action=root["recommended_action"],
+                        recovery_status=recovery["status"]
+                )                
 
             else:
 
@@ -190,7 +197,6 @@ def metrics():
 
         else:
 
-            # AI false positive
             data["ai_status"] = "Normal"
             data["prediction"] = 1
             data["confidence"] = 0
@@ -262,13 +268,11 @@ def update_thresholds():
 def manual_recovery():
 
     data = collect_metrics()
-
     root = analyze_root_cause(data)
 
     recovery = execute_recovery(
         root["root_cause"]
     )
-
     return jsonify({
 
         "status": recovery["status"],

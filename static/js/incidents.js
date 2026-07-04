@@ -6,13 +6,13 @@ async function loadIncidents() {
 
     try {
 
-        const response = await fetch("/history");
+        const response = await fetch("/api/incidents");
 
         if (!response.ok) {
-            throw new Error("Unable to fetch incident history");
+            throw new Error("Unable to fetch incidents");
         }
 
-        const history = await response.json();
+        const incidents = await response.json();
 
         const tbody =
             document.querySelector("#incidentTable tbody");
@@ -21,12 +21,12 @@ async function loadIncidents() {
 
         tbody.innerHTML = "";
 
-        if (history.length === 0) {
+        if (incidents.length === 0) {
 
             tbody.innerHTML = `
                 <tr>
                     <td colspan="4">
-                        No incidents recorded.
+                        No incidents detected.
                     </td>
                 </tr>
             `;
@@ -34,47 +34,20 @@ async function loadIncidents() {
             return;
         }
 
-        // API already returns newest first
-        history.forEach(row => {
+incidents.forEach(row => {
 
-            let status = "✅ Normal";
-            let cause = "System Healthy";
-            let action = "No Action Required";
+    tbody.innerHTML += `
+        <tr>
+            <td>${row.time}</td>
+            <td>${row.prediction}</td>
+            <td>${row.confidence}%</td>
+            <td>${row.root_cause}</td>
+            <td>${row.action}</td>
+            <td>${row.status}</td>
+        </tr>
+    `;
 
-            if (Number(row.cpu) > 85) {
-
-                status = "🚨 CPU Alert";
-                cause = "High CPU Usage";
-                action = "Terminate High CPU Process";
-
-            }
-
-            else if (Number(row.memory) > 85) {
-
-                status = "🚨 Memory Alert";
-                cause = "High Memory Usage";
-                action = "Clear Memory Cache";
-
-            }
-
-            else if (Number(row.disk) > 90) {
-
-                status = "🚨 Disk Alert";
-                cause = "Disk Almost Full";
-                action = "Clean Temporary Files";
-
-            }
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>${row.time}</td>
-                    <td>${status}</td>
-                    <td>${cause}</td>
-                    <td>${action}</td>
-                </tr>
-            `;
-
-        });
+});
 
     }
 

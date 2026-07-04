@@ -704,3 +704,56 @@ body.dark tbody tr:hover{
     }
 
 }
+/* ======================================
+   Report Action Buttons
+====================================== */
+
+.top-right{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.action-btn{
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+/* PDF Button */
+.pdf-btn{
+    background: #e53935;
+}
+
+.pdf-btn:hover{
+    background: #c62828;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(229,57,53,.35);
+}
+
+/* CSV Button */
+.csv-btn{
+    background: #2e7d32;
+}
+
+.csv-btn:hover{
+    background: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(46,125,50,.35);
+}
+
+/* Theme Button */
+.theme-btn{
+    background: #2563eb;
+}
+
+.theme-btn:hover{
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(37,99,235,.35);
+}

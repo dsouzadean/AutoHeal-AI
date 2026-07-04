@@ -73,3 +73,102 @@ async function loadReports() {
 loadReports();
 
 setInterval(loadReports,5000);
+// ======================================
+// Export Report as CSV
+// ======================================
+
+document.getElementById("exportCSV").addEventListener("click", async () => {
+
+    try {
+
+        const response = await fetch("/history");
+        const history = await response.json();
+
+        if (history.length === 0) {
+            alert("No report data available.");
+            return;
+        }
+
+        let csv = "Time,CPU (%),Memory (%),Disk (%),Processes\n";
+
+        history.forEach(row => {
+            csv += `${row.time},${row.cpu},${row.memory},${row.disk},${row.processes}\n`;
+        });
+
+        const blob = new Blob([csv], { type: "text/csv" });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "AutoHeal_Report.csv";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+        console.error(err);
+        alert("Failed to export CSV.");
+    }
+
+});
+// ======================================
+// Export Report as PDF
+// ======================================
+
+document.getElementById("exportPDF").addEventListener("click", async () => {
+
+    try {
+
+        const response = await fetch("/history");
+        const history = await response.json();
+
+        if (history.length === 0) {
+            alert("No report data available.");
+            return;
+        }
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Title
+        doc.setFontSize(18);
+        doc.text("AutoHeal-AI System Report", 14, 20);
+
+        // Date
+        doc.setFontSize(11);
+        doc.text(
+            "Generated: " + new Date().toLocaleString(),
+            14,
+            30
+        );
+
+        // Table
+        doc.autoTable({
+            startY: 40,
+            head: [[
+                "Time",
+                "CPU (%)",
+                "Memory (%)",
+                "Disk (%)",
+                "Processes"
+            ]],
+            body: history.map(row => [
+                row.time,
+                row.cpu,
+                row.memory,
+                row.disk,
+                row.processes
+            ])
+        });
+
+        // Download PDF
+        doc.save("AutoHeal_Report.pdf");
+
+    } catch (err) {
+
+        console.error(err);
+        alert("Failed to export PDF.");
+
+    }
+
+});

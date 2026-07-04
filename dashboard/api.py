@@ -1,7 +1,7 @@
 """
 Dashboard API
 """
-
+from database.incident_storage import get_incidents
 from flask import Blueprint, jsonify
 
 from database.database import SessionLocal
@@ -98,3 +98,11 @@ def recovery_history():
     finally:
 
         session.close()
+        # ==========================================
+# Incident History
+# ==========================================
+
+@api.route("/api/incidents")
+def incidents():
+
+    return jsonify(get_incidents())

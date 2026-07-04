@@ -49,13 +49,21 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 <header class="topbar">
 
-<div>
+    <div>
 
-<h1>📊 System Reports</h1>
+        <h1>📊 System Reports</h1>
 
-<p>Overall statistics collected from your system.</p>
+        <p>Overall statistics collected from your system.</p>
 
-</div>
+    </div>
+
+    <div class="top-right">
+
+        <button id="themeBtn">
+            🌙 Dark Mode
+        </button>
+
+    </div>
 
 </header>
 
@@ -115,6 +123,7 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 </main>
 
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 
 </body>

@@ -61,9 +61,21 @@
 
 <header class="topbar">
 
-    <h1>🤖 AI Analysis Engine</h1>
+    <div>
 
-    <p>Live anomaly detection and root cause analysis.</p>
+        <h1>🤖 AI Analysis Engine</h1>
+
+        <p>Live anomaly detection and root cause analysis.</p>
+
+    </div>
+
+    <div class="top-right">
+
+        <button id="themeBtn">
+            🌙 Dark Mode
+        </button>
+
+    </div>
 
 </header>
 
@@ -107,6 +119,7 @@
 
 </main>
 
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/ai_analysis.js') }}"></script>
 
 </body>

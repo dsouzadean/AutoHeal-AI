@@ -2,7 +2,7 @@
 AutoHeal-AI Main Application
 """
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 from database import initialize_database
 from database.metrics_storage import save_metrics
@@ -16,34 +16,40 @@ from ai.anomaly_detection import detect_anomaly
 from ai.root_cause import analyze_root_cause
 
 from self_healing.recovery import execute_recovery
-from self_healing.config import is_auto_recovery_enabled
-
-from flask import request
 
 from self_healing.config import (
     enable_auto_recovery,
     disable_auto_recovery,
-    is_auto_recovery_enabled
+    is_auto_recovery_enabled,
+    set_cpu_threshold,
+    set_memory_threshold,
+    get_cpu_threshold,
+    get_memory_threshold
 )
-
 
 app = Flask(__name__)
 
+# ===============================
 # Initialize Database
+# ===============================
+
 initialize_database()
 initialize_recovery_table()
 
-# Register API Blueprint
+# ===============================
+# Register Blueprint
+# ===============================
+
 app.register_blueprint(api)
 
+# ===============================
+# Pages
+# ===============================
 
 @app.route("/")
 def dashboard():
     return render_template("dashboard.html")
 
-# ===============================
-# Additional Pages
-# ===============================
 
 @app.route("/dashboard")
 def dashboard_page():
@@ -74,30 +80,30 @@ def reports():
 def settings():
     return render_template("settings.html")
 
+
+# ===============================
+# Metrics API
+# ===============================
+
 @app.route("/api/metrics")
 def metrics():
 
-    # Collect live system metrics
     data = collect_metrics()
 
-    # Save metrics
     save_metrics(data)
 
-    # AI Anomaly Detection
     ai_result = detect_anomaly(data)
 
     data["ai_status"] = ai_result["status"]
     data["prediction"] = ai_result["prediction"]
     data["score"] = ai_result.get("score", 0)
 
-    # Default values
     data["root_cause"] = "System Operating Normally"
     data["recommended_action"] = "No Action Required"
 
     data["recovery_status"] = "Idle"
     data["recovery_action"] = "None"
 
-    # Run AI analysis only when anomaly is detected
     if ai_result["status"] == "Anomaly":
 
         root = analyze_root_cause(data)
@@ -118,7 +124,12 @@ def metrics():
             data["recovery_action"] = "Manual Recovery Required"
 
     return jsonify(data)
-    
+
+
+# ===============================
+# Auto Recovery Status
+# ===============================
+
 @app.route("/api/recovery-status")
 def recovery_status():
 
@@ -126,6 +137,10 @@ def recovery_status():
         "enabled": is_auto_recovery_enabled()
     })
 
+
+# ===============================
+# Toggle Auto Recovery
+# ===============================
 
 @app.route("/api/toggle-recovery", methods=["POST"])
 def toggle_recovery():
@@ -138,6 +153,29 @@ def toggle_recovery():
     return jsonify({
         "enabled": is_auto_recovery_enabled()
     })
+
+
+# ===============================
+# Update Thresholds
+# ===============================
+
+@app.route("/api/update-thresholds", methods=["POST"])
+def update_thresholds():
+
+    data = request.get_json()
+
+    set_cpu_threshold(data["cpu"])
+    set_memory_threshold(data["memory"])
+
+    return jsonify({
+        "cpu": get_cpu_threshold(),
+        "memory": get_memory_threshold()
+    })
+
+
+# ===============================
+# Manual Recovery
+# ===============================
 
 @app.route("/api/manual-recovery", methods=["POST"])
 def manual_recovery():
@@ -156,10 +194,16 @@ def manual_recovery():
 
         "action": recovery["action"],
 
-        "problem": root["root_cause"]
+        "problem": root["root_cause"],
+
+        "verification": recovery["verification"]
 
     })
 
+
+# ===============================
+# Run Application
+# ===============================
 
 if __name__ == "__main__":
     app.run(

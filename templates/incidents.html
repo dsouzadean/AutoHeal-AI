@@ -64,13 +64,21 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 <header class="topbar">
 
-<div>
+    <div>
 
-<h1>🚨 Incident History</h1>
+        <h1>🚨 Incident History</h1>
 
-<p>Every anomaly detected by AutoHeal-AI</p>
+        <p>Every anomaly detected by AutoHeal-AI</p>
 
-</div>
+    </div>
+
+    <div class="top-right">
+
+        <button id="themeBtn">
+            🌙 Dark Mode
+        </button>
+
+    </div>
 
 </header>
 
@@ -120,6 +128,7 @@ Loading...
 
 </main>
 
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
 
 </body>

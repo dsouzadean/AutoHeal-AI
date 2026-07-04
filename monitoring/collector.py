@@ -7,6 +7,7 @@ from monitoring.memory_monitor import get_memory_usage
 from monitoring.disk_monitor import get_disk_usage
 from monitoring.network_monitor import get_network_usage
 from monitoring.process_monitor import get_process_count
+from monitoring.process_analyzer import get_top_process
 
 import platform
 import socket
@@ -16,8 +17,13 @@ import psutil
 def collect_metrics():
 
     network = get_network_usage()
+    top_process = get_top_process()
 
     data = {
+
+        # ===============================
+        # Live Metrics
+        # ===============================
 
         "cpu": get_cpu_usage(),
 
@@ -30,6 +36,10 @@ def collect_metrics():
         "network_received": network["received"],
 
         "processes": get_process_count(),
+
+        # ===============================
+        # System Information
+        # ===============================
 
         "os": platform.system(),
 
@@ -44,6 +54,24 @@ def collect_metrics():
 
         "total_disk": round(
             psutil.disk_usage("C:\\").total / (1024 ** 3),
+            2
+        ),
+
+        # ===============================
+        # Process Analysis
+        # ===============================
+
+        "top_process": top_process["name"],
+
+        "top_process_pid": top_process["pid"],
+
+        "top_memory": round(
+            top_process["memory_percent"],
+            2
+        ),
+
+        "top_cpu": round(
+            top_process["cpu_percent"],
             2
         )
 

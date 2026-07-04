@@ -376,26 +376,96 @@ async function loadHistory() {
     try {
 
         const response = await fetch("/history");
-
         const history = await response.json();
+
+        // ===============================
+        // Recent Metrics Table
+        // ===============================
 
         const tbody = document.querySelector("#metricsTable tbody");
 
-        tbody.innerHTML = "";
+        if (tbody) {
 
-        history.forEach(row => {
+            tbody.innerHTML = "";
 
-            tbody.innerHTML += `
-                <tr>
-                    <td>${row.time}</td>
-                    <td>${Number(row.cpu).toFixed(1)}%</td>
-                    <td>${Number(row.memory).toFixed(1)}%</td>
-                    <td>${Number(row.disk).toFixed(1)}%</td>
-                    <td>${row.processes}</td>
-                </tr>
-            `;
+            history.forEach(row => {
 
-        });
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.time}</td>
+                        <td>${Number(row.cpu).toFixed(1)}%</td>
+                        <td>${Number(row.memory).toFixed(1)}%</td>
+                        <td>${Number(row.disk).toFixed(1)}%</td>
+                        <td>${row.processes}</td>
+                    </tr>
+                `;
+
+            });
+
+        }
+
+        // ===============================
+        // Dashboard Incident Timeline
+        // ===============================
+
+        const incidentBody = document.getElementById("incidentTable");
+
+        if (incidentBody) {
+
+            incidentBody.innerHTML = "";
+
+            history
+                .slice()
+                .reverse()
+                .slice(0, 5)
+                .forEach(row => {
+
+                    let incident = "No incidents detected";
+                    let status = "✅ Stable";
+
+                    if (Number(row.cpu) > 85) {
+
+                        incident = "High CPU Usage";
+                        status = "🚨 Alert";
+
+                    }
+                    else if (Number(row.memory) > 85) {
+
+                        incident = "High Memory Usage";
+                        status = "🚨 Alert";
+
+                    }
+                    else if (Number(row.disk) > 90) {
+
+                        incident = "Disk Almost Full";
+                        status = "🚨 Alert";
+
+                    }
+
+                    incidentBody.innerHTML += `
+                        <tr>
+                            <td>${row.time}</td>
+                            <td>${incident}</td>
+                            <td>${status}</td>
+                        </tr>
+                    `;
+
+                });
+
+            // Show a default row if there is no history
+            if (history.length === 0) {
+
+                incidentBody.innerHTML = `
+                    <tr>
+                        <td>--</td>
+                        <td>No incidents detected</td>
+                        <td>✅ Stable</td>
+                    </tr>
+                `;
+
+            }
+
+        }
 
     }
 
@@ -567,12 +637,13 @@ async function runManualRecovery() {
 
         const result = await response.json();
 
-        alert(
-            "Recovery Completed!\n\n" +
-            "Problem: " + result.problem +
-            "\nAction: " + result.action +
-            "\nStatus: " + result.status
-        );
+    alert(
+        "Recovery Completed!\n\n" +
+        "Problem: " + result.problem +
+        "\nAction: " + result.action +
+        "\nStatus: " + result.status +
+        "\nVerification: " + result.verification
+    );
 
         // Refresh dashboard data
         await refreshDashboard();
@@ -590,31 +661,7 @@ async function runManualRecovery() {
 
 }
 
-// ===============================
-// Dark Mode
-// ===============================
 
-const themeBtn = document.getElementById("themeBtn");
-
-if (themeBtn) {
-
-    themeBtn.addEventListener("click", () => {
-
-        document.body.classList.toggle("dark");
-
-        if (document.body.classList.contains("dark")) {
-
-            themeBtn.innerHTML = "☀️ Light Mode";
-
-        } else {
-
-            themeBtn.innerHTML = "🌙 Dark Mode";
-
-        }
-
-    });
-
-}
 
 // ===============================
 // Auto Refresh

@@ -65,13 +65,21 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 <header class="topbar">
 
-<div>
+    <div>
 
-<h1>⚙ System Settings</h1>
+        <h1>⚙ System Settings</h1>
 
-<p>Configure AutoHeal-AI preferences</p>
+        <p>Configure AutoHeal-AI preferences</p>
 
-</div>
+    </div>
+
+    <div class="top-right">
+
+        <button id="themeBtn">
+            🌙 Dark Mode
+        </button>
+
+    </div>
 
 </header>
 
@@ -177,6 +185,7 @@ max="100">
 
 </main>
 
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 
 </body>

@@ -65,13 +65,25 @@
 
     <main class="main">
 
-        <header class="topbar">
+<header class="topbar">
 
-            <h1>📈 Live Monitoring</h1>
+    <div>
 
-            <p>Detailed real-time monitoring of system resources.</p>
+        <h1>📈 Live Monitoring</h1>
 
-        </header>
+        <p>Detailed real-time monitoring of system resources.</p>
+
+    </div>
+
+    <div class="top-right">
+
+        <button id="themeBtn">
+            🌙 Dark Mode
+        </button>
+
+    </div>
+
+</header>
 
         <section class="graphs">
 
@@ -161,7 +173,8 @@
 
     </main>
 
-    <<script src="{{ url_for('static', filename='js/monitoring.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script src="{{ url_for('static', filename='js/monitoring.js') }}"></script>
 
 </body>
 

@@ -4,18 +4,44 @@ Available Self-Healing Actions
 
 
 def get_recovery_action(root_cause):
+    """
+    Returns the recovery action for a detected root cause.
+    """
 
-    if root_cause == "High CPU Usage":
-        return "Terminate High CPU Process"
+    actions = {
 
-    elif root_cause == "High Memory Usage":
-        return "Clear Memory Cache"
+        # CPU
+        "High CPU Usage":
+            "Terminate High CPU Process",
 
-    elif root_cause == "Disk Almost Full":
-        return "Clean Temporary Files"
+        "Potential CPU Bottleneck":
+            "Restart High CPU Service",
 
-    elif root_cause == "High Network Activity":
-        return "Reset Network Adapter"
+        # Memory
+        "High Memory Usage":
+            "Clear Memory Cache",
 
-    else:
-        return "No Action Required"
+        "Potential Memory Leak":
+            "Restart Memory Intensive Process",
+
+        # Disk
+        "Disk Almost Full":
+            "Clean Temporary Files",
+
+        "Potential Disk Issue":
+            "Clean Temporary Files",
+
+        # Network
+        "High Network Activity":
+            "Reset Network Adapter",
+
+        # Generic
+        "Unknown Anomalous Behaviour":
+            "Collect Diagnostic Logs",
+
+        "System Operating Normally":
+            "No Action Required"
+
+    }
+
+    return actions.get(root_cause, "Collect Diagnostic Logs")

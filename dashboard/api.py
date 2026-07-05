@@ -106,3 +106,37 @@ def recovery_history():
 def incidents():
 
     return jsonify(get_incidents())
+
+# ==========================================
+# Dashboard Statistics
+# ==========================================
+
+@api.route("/api/dashboard-stats")
+def dashboard_stats():
+
+    session = SessionLocal()
+
+    try:
+
+        total_recoveries = session.query(RecoveryLog).count()
+
+        successful_recoveries = (
+            session.query(RecoveryLog)
+            .filter(RecoveryLog.status == "Success")
+            .count()
+        )
+
+        failed_recoveries = total_recoveries - successful_recoveries
+
+        total_incidents = len(get_incidents())
+
+        return jsonify({
+            "total_incidents": total_incidents,
+            "total_recoveries": total_recoveries,
+            "successful_recoveries": successful_recoveries,
+            "failed_recoveries": failed_recoveries
+        })
+
+    finally:
+
+        session.close()

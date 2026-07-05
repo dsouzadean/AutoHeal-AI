@@ -105,6 +105,25 @@
         ======================= -->
 
         <section class="cards">
+            <div class="card">
+    <h3>🚨 Total Incidents</h3>
+    <h1 id="totalIncidents">0</h1>
+</div>
+
+<div class="card">
+    <h3>🔄 Total Recoveries</h3>
+    <h1 id="totalRecoveries">0</h1>
+</div>
+
+<div class="card">
+    <h3>✅ Successful</h3>
+    <h1 id="successfulRecoveries">0</h1>
+</div>
+
+<div class="card">
+    <h3>❌ Failed</h3>
+    <h1 id="failedRecoveries">0</h1>
+</div>
 
             <div class="card">
 
@@ -369,6 +388,11 @@
 
 <section class="cards">
 
+    <!-- Statistics Cards -->
+
+   
+    <!-- Recovery Controls -->
+
     <div class="card">
 
         <h3>⚙ Recovery Controls</h3>
@@ -378,13 +402,13 @@
             <span id="autoRecoveryStatus">ON</span>
         </p>
 
-        <button id="toggleRecoveryBtn">
+        <button id="toggleRecoveryBtn" class="control-btn">
             Disable Auto Recovery
         </button>
 
         <br><br>
 
-        <button id="manualRecoveryBtn">
+        <button id="manualRecoveryBtn" class="control-btn secondary-btn">
             ▶ Run Recovery Now
         </button>
 

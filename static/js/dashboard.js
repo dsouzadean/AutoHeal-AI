@@ -392,55 +392,44 @@ async function loadHistory() {
         // ===============================
         // Incident Timeline
         // ===============================
+        const incidentBody = document.getElementById("incidentTable");
 
-        const incidentBody =
-            document.getElementById("incidentTable");
+if (incidentBody) {
 
-        if (incidentBody) {
+    const response = await fetch("/api/incidents");
+    const incidents = await response.json();
 
-            incidentBody.innerHTML = "";
+    incidentBody.innerHTML = "";
 
-            history
-                .slice()
-                .reverse()
-                .slice(0, 5)
-                .forEach(row => {
+    if (incidents.length === 0) {
 
-                    let incident = "No incidents detected";
-                    let status = "✅ Stable";
+        incidentBody.innerHTML = `
+            <tr>
+                <td colspan="3">No incidents detected</td>
+            </tr>
+        `;
 
-                    if (Number(row.cpu) > 85) {
+    } else {
 
-                        incident = "High CPU Usage";
-                        status = "🚨 Alert";
+        incidents.slice(0, 3).forEach(row => {
 
-                    }
+            incidentBody.innerHTML += `
+                <tr>
+                    <td>${row.time}</td>
+                    <td>${row.root_cause}</td>
+                    <td>
+    <span class="status detected">
+        ${row.status}
+    </span>
+</td>
+                </tr>
+            `;
 
-                    else if (Number(row.memory) > 85) {
+        });
 
-                        incident = "High Memory Usage";
-                        status = "🚨 Alert";
+    }
 
-                    }
-
-                    else if (Number(row.disk) > 90) {
-
-                        incident = "Disk Almost Full";
-                        status = "🚨 Alert";
-
-                    }
-
-                    incidentBody.innerHTML += `
-                        <tr>
-                            <td>${row.time}</td>
-                            <td>${incident}</td>
-                            <td>${status}</td>
-                        </tr>
-                    `;
-
-                });
-
-        }
+}
 
     }
 
@@ -497,7 +486,11 @@ async function loadRecoveryHistory() {
                     <td>${row.process || "-"}</td>
                     <td>${row.pid || "-"}</td>
                     <td>${row.duration || 0}s</td>
-                    <td>${row.status}</td>
+                    <td>
+    <span class="status-badge detected">
+        ${row.status}
+    </span>
+</td>
                 </tr>
             `;
 
@@ -662,6 +655,41 @@ async function runManualRecovery() {
 
 }
 // ===============================
+// Dashboard Statistics
+// ===============================
+
+async function loadDashboardStats() {
+
+    try {
+
+        const response = await fetch("/api/dashboard-stats");
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch dashboard statistics");
+        }
+
+        const stats = await response.json();
+
+        document.getElementById("totalIncidents").textContent =
+            stats.total_incidents;
+
+        document.getElementById("totalRecoveries").textContent =
+            stats.total_recoveries;
+
+        document.getElementById("successfulRecoveries").textContent =
+            stats.successful_recoveries;
+
+        document.getElementById("failedRecoveries").textContent =
+            stats.failed_recoveries;
+
+    } catch (err) {
+
+        console.error("Dashboard Stats Error:", err);
+
+    }
+
+}
+// ===============================
 // Initialize Dashboard
 // ===============================
 
@@ -671,6 +699,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadMetrics();
     await loadHistory();
     await loadRecoveryHistory();
+    await loadDashboardStats();
     await updateRecoveryStatus();
 
     // Button Events
@@ -712,13 +741,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Slow Refresh (History Tables)
     // ======================================
 
-    setInterval(async () => {
+ setInterval(async () => {
 
-        await loadHistory();
+    await loadHistory();
 
-        await loadRecoveryHistory();
+    await loadRecoveryHistory();
 
-    }, 30000);
+    await loadDashboardStats();
+
+}, 30000);
 
     // ======================================
     // Recovery Status

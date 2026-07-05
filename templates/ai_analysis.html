@@ -65,7 +65,7 @@
 
         <h1>🤖 AI Analysis Engine</h1>
 
-        <p>Live anomaly detection and root cause analysis.</p>
+        <p>Live anomaly detection, explainable AI and root cause analysis.</p>
 
     </div>
 
@@ -89,6 +89,16 @@
     <div class="card">
         <h3>Confidence</h3>
         <h1 id="confidence">0%</h1>
+    </div>
+
+    <div class="card">
+        <h3>Failure Probability</h3>
+        <h1 id="failureProbability">0%</h1>
+    </div>
+
+    <div class="card">
+        <h3>Risk Level</h3>
+        <h1 id="riskLevel">LOW</h1>
     </div>
 
 </section>
@@ -123,7 +133,7 @@
 
         <h3>🖥 Suspected Process</h3>
 
-        <p><strong>Process:</strong></p>
+        <p><strong>Process</strong></p>
         <h2 id="suspectProcess">Loading...</h2>
 
         <hr>
@@ -140,6 +150,50 @@
 
         <p><strong>CPU Usage</strong></p>
         <h2 id="processCpu">0%</h2>
+
+    </div>
+
+    <div class="card">
+
+        <h3>🧠 Explainable AI</h3>
+
+        <table style="width:100%;">
+
+            <tr>
+                <td>CPU Contribution</td>
+                <td id="cpuContribution">0%</td>
+            </tr>
+
+            <tr>
+                <td>Memory Contribution</td>
+                <td id="memoryContribution">0%</td>
+            </tr>
+
+            <tr>
+                <td>Disk Contribution</td>
+                <td id="diskContribution">0%</td>
+            </tr>
+
+            <tr>
+                <td>Process Contribution</td>
+                <td id="processContribution">0%</td>
+            </tr>
+
+        </table>
+
+        <br>
+
+        <h3>
+
+            Primary Cause
+
+        </h3>
+
+        <h2 id="primaryCause">
+
+            Unknown
+
+        </h2>
 
     </div>
 

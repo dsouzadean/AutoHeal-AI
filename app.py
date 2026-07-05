@@ -11,6 +11,11 @@ from database.metrics_storage import save_metrics
 from database.recovery_storage import initialize_recovery_table
 from notifications.email_alert import send_email_alert
 from monitoring.collector import collect_metrics
+from ai.failure_prediction import predict_failure
+from ai.trend_analyzer import analyze_trend
+from ai.health_score import calculate_health_score
+from ai.forecast import forecast
+from ai.explainability import explain_prediction
 
 from dashboard.api import api
 
@@ -29,6 +34,11 @@ from self_healing.config import (
     get_memory_threshold
 )
 
+from database.prediction_history import (
+    initialize_prediction_table,
+    save_prediction
+)
+
 app = Flask(__name__)
 
 # =====================================
@@ -43,6 +53,7 @@ SAVE_INTERVAL = 30
 
 initialize_database()
 initialize_recovery_table()
+initialize_prediction_table()
 
 # =====================================
 # Register Blueprint
@@ -104,17 +115,7 @@ def metrics():
 
     data = collect_metrics()
 
-
-    # ---------------------------------
-    # Save Metrics Every 30 Seconds
-    # ---------------------------------
-
     current_time = time.time()
-
-    if current_time - LAST_SAVE >= SAVE_INTERVAL:
-
-        save_metrics(data)
-        LAST_SAVE = current_time
 
     # ---------------------------------
     # AI Detection
@@ -127,6 +128,70 @@ def metrics():
     data["score"] = ai_result.get("score", 0)
 
     # ---------------------------------
+    # Failure Prediction (ML)
+    # ---------------------------------
+
+    failure = predict_failure(data)
+
+    data["failure_probability"] = failure["failure_probability"]
+    data["failure_confidence"] = failure["confidence"]
+    data["estimated_failure_time"] = failure["estimated_time_minutes"]
+    data["risk_level"] = failure["risk"]
+    data["recommendation"] = failure["recommendation"]
+
+    # ---------------------------------
+    # Explainable AI
+    # ---------------------------------
+
+    explanation = explain_prediction(data)
+
+    data["primary_cause"] = explanation["primary_cause"]
+    data["contributions"] = explanation["contributions"]
+
+    # ---------------------------------
+    # Forecast Engine
+    # ---------------------------------
+
+    forecast_result = forecast()
+
+    data["future_cpu"] = forecast_result["future_cpu"]
+    data["future_memory"] = forecast_result["future_memory"]
+    data["future_disk"] = forecast_result["future_disk"]
+    data["forecast_status"] = forecast_result["forecast_status"]
+
+    # ---------------------------------
+    # Health Score
+    # ---------------------------------
+
+    health = calculate_health_score(data)
+
+    data["health_score"] = health["score"]
+    data["health_status"] = health["status"]
+
+    # ---------------------------------
+    # Trend Analysis
+    # ---------------------------------
+
+    trend = analyze_trend()
+
+    data["trend"] = trend["trend"]
+    data["trend_change"] = trend["change"]
+    data["trend_message"] = trend["message"]
+
+    # ---------------------------------
+    # Save Metrics + Prediction
+    # Every 30 Seconds
+    # ---------------------------------
+
+    if current_time - LAST_SAVE >= SAVE_INTERVAL:
+
+        save_metrics(data)
+
+        save_prediction(data, failure)
+
+        LAST_SAVE = current_time
+
+    # ---------------------------------
     # Default Values
     # ---------------------------------
 
@@ -136,10 +201,12 @@ def metrics():
     data["suspect_process"] = data.get("top_process", "Unknown")
     data["pid"] = data.get("top_process_pid", "-")
 
-    # Confidence
     if ai_result["status"] == "Normal":
+
         data["confidence"] = 0
+
     else:
+
         data["confidence"] = 95
 
     data["recovery_status"] = "Idle"
@@ -149,7 +216,29 @@ def metrics():
     # Root Cause Analysis
     # ---------------------------------
 
-    if ai_result["status"] == "Anomaly":
+    risk = data["risk_level"]
+
+    should_recover = (
+
+        ai_result["status"] == "Anomaly"
+
+        or (
+
+            risk == "CRITICAL"
+
+            and is_auto_recovery_enabled()
+
+        )
+
+    )
+
+    if should_recover:
+
+        print("\n========== AI Prediction ==========")
+        print(f"Risk Level : {risk}")
+        print(f"Probability : {data['failure_probability']}%")
+        print(f"Confidence : {data['failure_confidence']}%")
+        print("===================================\n")
 
         root = analyze_root_cause(data)
 
@@ -160,35 +249,46 @@ def metrics():
         data["pid"] = root["pid"]
         data["confidence"] = root["confidence"]
 
-        # ---------------------------------
-        # Save Incident
-        # ---------------------------------
-
-        # Save Incident (Only Once Per Incident)
         if root["root_cause"] != "System Operating Normally":
 
             save_incident(
-                prediction="Anomaly",
+
+                prediction=f"{data['failure_probability']}%",
+
                 confidence=root["confidence"],
+
                 root_cause=root["root_cause"],
+
                 action=root["recommended_action"],
+
                 status="Detected"
+
             )
 
             if is_auto_recovery_enabled():
 
                 recovery = execute_recovery(
+
                     root["root_cause"]
+
                 )
 
                 data["recovery_status"] = recovery["status"]
                 data["recovery_action"] = recovery["action"]
+
                 send_email_alert(
-                        root_cause=root["root_cause"],
-                        confidence=root["confidence"],
-                        action=root["recommended_action"],
-                        recovery_status=recovery["status"]
-                )                
+
+                    prediction=data["failure_probability"],
+
+                    root_cause=root["root_cause"],
+
+                    confidence=root["confidence"],
+
+                    action=root["recommended_action"],
+
+                    recovery_status=recovery["status"]
+
+                )
 
             else:
 
@@ -204,16 +304,6 @@ def metrics():
             data["recovery_action"] = "No Action Required"
 
     return jsonify(data)
-# =====================================
-# Auto Recovery Status
-# =====================================
-
-@app.route("/api/recovery-status")
-def recovery_status():
-
-    return jsonify({
-        "enabled": is_auto_recovery_enabled()
-    })
 
 
 # =====================================
@@ -267,12 +357,18 @@ def update_thresholds():
 @app.route("/api/manual-recovery", methods=["POST"])
 def manual_recovery():
 
+    # Collect current metrics
     data = collect_metrics()
+
+    # Analyze current problem
     root = analyze_root_cause(data)
 
+    # Execute recovery
     recovery = execute_recovery(
         root["root_cause"]
     )
+
+    # Return complete recovery information
     return jsonify({
 
         "status": recovery["status"],
@@ -287,7 +383,11 @@ def manual_recovery():
 
         "process": recovery.get("process", "Unknown"),
 
-        "pid": recovery.get("pid", 0)
+        "pid": recovery.get("pid", 0),
+
+        "retry": recovery.get("retry", False),
+
+        "recovery_score": recovery.get("recovery_score", 0)
 
     })
 

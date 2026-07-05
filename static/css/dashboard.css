@@ -296,6 +296,94 @@ body{
 
 }
 
+#failureProbability{
+
+    color:#dc2626;
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+#riskLevel{
+
+    font-weight:bold;
+
+}
+
+#failureConfidence{
+
+    color:#2563eb;
+
+}
+
+#failureTime{
+
+    color:#f59e0b;
+
+}
+
+#failureRecommendation{
+
+    font-weight:600;
+
+    color:#16a34a;
+
+}
+
+#trend{
+
+    color:#7c3aed;
+
+    font-weight:bold;
+
+}
+
+#trendMessage{
+
+    font-weight:600;
+
+}
+
+#healthScore{
+
+    font-size:46px;
+
+    color:#2563eb;
+
+    margin-bottom:10px;
+
+    font-weight:bold;
+
+}
+
+#futureCPU{
+
+    color:#2563eb;
+
+}
+
+#futureMemory{
+
+    color:#16a34a;
+
+}
+
+#futureDisk{
+
+    color:#f59e0b;
+
+}
+
+#forecastStatus{
+
+    font-weight:bold;
+
+    color:#dc2626;
+
+}
+
 .status-card p{
 
     color:#777;

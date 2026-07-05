@@ -90,3 +90,52 @@ def get_metrics(limit=20):
     finally:
 
         session.close()
+
+
+# ==========================================
+# Forecast Engine Support
+# ==========================================
+
+def load_metrics_history(limit=20):
+    """
+    Returns recent metrics for AI forecasting.
+    """
+
+    session = SessionLocal()
+
+    try:
+
+        rows = (
+            session.query(SystemMetrics)
+            .order_by(SystemMetrics.id.desc())
+            .limit(limit)
+            .all()
+        )
+
+        history = []
+
+        for row in rows:
+
+            history.append({
+
+                "cpu": row.cpu,
+
+                "memory": row.memory,
+
+                "disk": row.disk,
+
+                "network_sent": row.network_sent,
+
+                "network_received": row.network_received,
+
+                "processes": row.processes,
+
+                "timestamp": row.timestamp
+
+            })
+
+        return history
+
+    finally:
+
+        session.close()

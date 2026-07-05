@@ -27,6 +27,16 @@ async function loadAI() {
             data.recommended_action;
 
         // ===============================
+        // Failure Prediction
+        // ===============================
+
+        document.getElementById("failureProbability").textContent =
+            data.failure_probability + "%";
+
+        document.getElementById("riskLevel").textContent =
+            data.risk_level;
+
+        // ===============================
         // Process Analysis
         // ===============================
 
@@ -37,10 +47,33 @@ async function loadAI() {
             data.pid;
 
         document.getElementById("processMemory").textContent =
-            data.top_memory + "%";
+            (data.top_memory || 0) + "%";
 
         document.getElementById("processCpu").textContent =
-            data.top_cpu + "%";
+            (data.top_cpu || 0) + "%";
+
+        // ===============================
+        // Explainable AI
+        // ===============================
+
+        if (data.contributions) {
+
+            document.getElementById("cpuContribution").textContent =
+                data.contributions.CPU + "%";
+
+            document.getElementById("memoryContribution").textContent =
+                data.contributions.Memory + "%";
+
+            document.getElementById("diskContribution").textContent =
+                data.contributions.Disk + "%";
+
+            document.getElementById("processContribution").textContent =
+                data.contributions.Processes + "%";
+
+        }
+
+        document.getElementById("primaryCause").textContent =
+            data.primary_cause || "Unknown";
 
     }
 

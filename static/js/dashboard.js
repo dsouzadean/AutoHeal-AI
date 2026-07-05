@@ -63,23 +63,30 @@ async function loadMetrics() {
         // System Health
         // ===============================
 
-        const health = document.getElementById("health");
+const health = document.getElementById("health");
+const score = document.getElementById("healthScore");
+const status = document.getElementById("healthStatus");
 
-        if (health) {
+if (health) {
 
-            if (data.cpu > 85 || data.memory > 85) {
+    health.textContent =
+        data.health_status;
 
-                health.textContent = "🔴 High Load";
-                health.style.color = "#dc2626";
+}
 
-            } else {
+if (score) {
 
-                health.textContent = "🟢 Healthy";
-                health.style.color = "#16a34a";
+    score.textContent =
+        data.health_score + "%";
 
-            }
+}
 
-        }
+if (status) {
+
+    status.textContent =
+        "Overall AI System Health";
+
+}
 
         // ===============================
         // AI Status
@@ -137,43 +144,101 @@ async function loadMetrics() {
 
         }
 
-        // ===============================
-        // Prediction
-        // ===============================
+// ===============================
+// Failure Prediction
+// ===============================
 
-        const prediction =
-            document.getElementById("prediction");
+const prediction =
+    document.getElementById("prediction");
 
-        if (prediction) {
+if (prediction) {
 
-            if (data.cpu > 90) {
+    prediction.textContent =
+        data.risk_level + " Risk";
 
-                prediction.textContent =
-                    "⚠ CPU Overload Possible";
+    if (data.risk_level === "CRITICAL") {
 
-                prediction.style.color = "#dc2626";
+        prediction.style.color = "#dc2626";
 
-            }
+    }
 
-            else if (data.memory > 90) {
+    else if (data.risk_level === "HIGH") {
 
-                prediction.textContent =
-                    "⚠ Memory Exhaustion Possible";
+        prediction.style.color = "#ef4444";
 
-                prediction.style.color = "#dc2626";
+    }
 
-            }
+    else if (data.risk_level === "MEDIUM") {
 
-            else {
+        prediction.style.color = "#f59e0b";
 
-                prediction.textContent =
-                    "✅ No Failure Predicted";
+    }
 
-                prediction.style.color = "#16a34a";
+    else {
 
-            }
+        prediction.style.color = "#16a34a";
 
-        }
+    }
+
+}
+
+document.getElementById("failureProbability").textContent =
+    data.failure_probability + "%";
+
+document.getElementById("failureConfidence").textContent =
+    data.failure_confidence + "%";
+
+const risk = document.getElementById("riskLevel");
+
+risk.textContent = data.risk_level;
+
+if (data.risk_level === "CRITICAL") {
+
+    risk.style.color = "#dc2626";
+
+}
+
+else if (data.risk_level === "HIGH") {
+
+    risk.style.color = "#ef4444";
+
+}
+
+else if (data.risk_level === "MEDIUM") {
+
+    risk.style.color = "#f59e0b";
+
+}
+
+else {
+
+    risk.style.color = "#16a34a";
+
+}
+
+document.getElementById("failureTime").textContent =
+    data.estimated_failure_time + " min";
+
+document.getElementById("failureRecommendation").textContent =
+    data.recommendation;
+
+    document.getElementById("trend").textContent =
+    data.trend;
+
+document.getElementById("trendMessage").textContent =
+    data.trend_message;
+
+    document.getElementById("futureCPU").textContent =
+    data.future_cpu + "%";
+
+document.getElementById("futureMemory").textContent =
+    data.future_memory + "%";
+
+document.getElementById("futureDisk").textContent =
+    data.future_disk + "%";
+
+document.getElementById("forecastStatus").textContent =
+    data.forecast_status;
 
         // ===============================
         // Alerts
@@ -625,19 +690,27 @@ async function runManualRecovery() {
         const result =
             await response.json();
 
-        alert(
+alert(
 
-            "Recovery Completed!\n\n" +
+    "Recovery Completed!\n\n" +
 
-            "Problem: " + result.problem +
+    "Problem: " + result.problem +
 
-            "\nAction: " + result.action +
+    "\nAction: " + result.action +
 
-            "\nStatus: " + result.status +
+    "\nStatus: " + result.status +
 
-            "\nVerification: " + result.verification
+    "\nVerification: " + result.verification +
 
-        );
+    "\nRecovery Score: " + result.recovery_score +
+
+    "%" +
+
+    "\nRetry: " +
+
+    (result.retry ? "Yes" : "No")
+
+);
 
         await loadMetrics();
 

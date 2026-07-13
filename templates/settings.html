@@ -6,137 +6,295 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
-<title>Settings</title>
+<title>Settings | AutoHeal-AI</title>
 
 <link rel="stylesheet"
-href="{{ url_for('static', filename='css/dashboard.css') }}">
+href="{{ url_for('static', filename='css/settings.css') }}">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
 
+<div class="background">
+
+<div class="gradient one"></div>
+
+<div class="gradient two"></div>
+
+</div>
+
+<div class="dashboard-container">
+
+<!-- ================================================= -->
+<!-- Sidebar -->
+<!-- ================================================= -->
+
 <aside class="sidebar">
 
 <div class="logo">
 
-<h2>🤖 AutoHeal-AI</h2>
+<div class="logo-icon">
 
-<p>Predict • Heal • Learn</p>
+<i class="fa-solid fa-brain"></i>
 
 </div>
 
-<nav>
+<div>
 
-<ul>
+<h2>AutoHeal-AI</h2>
 
-<li onclick="location.href='/dashboard'">
-🏠 Dashboard
-</li>
+<span>Predict • Heal • Learn</span>
 
-<li onclick="location.href='/monitoring'">
-📈 Monitoring
-</li>
+</div>
 
-<li onclick="location.href='/ai-analysis'">
-🤖 AI Analysis
-</li>
+</div>
 
-<li onclick="location.href='/incidents'">
-🚨 Incidents
-</li>
+<nav class="menu">
 
-<li onclick="location.href='/reports'">
-📊 Reports
-</li>
+<a href="/dashboard">
 
-<li class="active">
-⚙ Settings
-</li>
+<i class="fa-solid fa-chart-line"></i>
 
-</ul>
+<span>Dashboard</span>
+
+</a>
+
+<a href="/monitoring">
+
+<i class="fa-solid fa-desktop"></i>
+
+<span>Monitoring</span>
+
+</a>
+
+<a href="/ai-analysis">
+
+<i class="fa-solid fa-microchip"></i>
+
+<span>AI Analysis</span>
+
+</a>
+
+<a href="/incidents">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+<span>Incidents</span>
+
+</a>
+
+<a href="/reports">
+
+<i class="fa-solid fa-chart-column"></i>
+
+<span>Reports</span>
+
+</a>
+
+<a class="active"
+href="/settings">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Settings</span>
+
+</a>
 
 </nav>
 
 </aside>
 
+<!-- ================================================= -->
+<!-- Main -->
+<!-- ================================================= -->
+
 <main class="main">
 
 <header class="topbar">
 
-    <div>
+<div>
 
-        <h1>⚙ System Settings</h1>
+<h1>
 
-        <p>Configure AutoHeal-AI preferences</p>
+System Settings
 
-    </div>
+</h1>
 
-    <div class="top-right">
+<p>
 
-        <button id="themeBtn">
-            🌙 Dark Mode
-        </button>
+Configure AutoHeal-AI behaviour and monitoring preferences.
 
-    </div>
+</p>
+
+</div>
 
 </header>
 
-<section class="cards">
+<!-- ================================================= -->
+<!-- Hero -->
+<!-- ================================================= -->
 
-<div class="card">
+<section class="hero">
 
-<h3>Auto Recovery</h3>
+<div class="hero-left">
 
-<p id="autoRecoveryStatus">
+<span>
+
+SYSTEM CONFIGURATION
+
+</span>
+
+<h1>
+
+AI Control Center
+
+</h1>
+
+<p>
+
+Manage Auto Recovery,
+monitoring intervals,
+alert thresholds,
+and intelligent recovery behaviour
+from a single dashboard.
+
+</p>
+
+</div>
+
+<div class="hero-right">
+
+<div class="status-circle">
+
+<div class="circle-inner">
+
+<h2 id="autoRecoveryStatus">
+
 Loading...
+
+</h2>
+
+<p>
+
+Recovery Engine
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- Settings Cards -->
+<!-- ================================================= -->
+
+<section class="settings-grid">
+
+<div class="setting-card">
+
+<i class="fa-solid fa-robot"></i>
+
+<h3>
+
+Auto Recovery
+
+</h3>
+
+<p>
+
+Automatically recover from AI detected issues.
+
 </p>
 
 <button id="toggleRecoveryBtn">
-Toggle Auto Recovery
+
+Toggle Recovery
+
 </button>
 
 </div>
 
-<div class="card">
+<div class="setting-card">
 
-<h3>Dashboard Refresh</h3>
+<i class="fa-solid fa-clock"></i>
+
+<h3>
+
+Refresh Interval
+
+</h3>
 
 <select id="refreshInterval">
 
-<option value="2">2 Seconds</option>
+<option value="2">
 
-<option value="5" selected>5 Seconds</option>
+2 Seconds
 
-<option value="10">10 Seconds</option>
+</option>
 
-<option value="30">30 Seconds</option>
+<option selected value="5">
+
+5 Seconds
+
+</option>
+
+<option value="10">
+
+10 Seconds
+
+</option>
+
+<option value="30">
+
+30 Seconds
+
+</option>
 
 </select>
 
 </div>
 
-<div class="card">
+<div class="setting-card">
 
-<h3>CPU Alert Threshold</h3>
+<i class="fa-solid fa-microchip"></i>
+
+<h3>
+
+CPU Threshold
+
+</h3>
 
 <input
-type="number"
 id="cpuThreshold"
+type="number"
 value="85"
 min="1"
 max="100">
 
 </div>
 
-<div class="card">
+<div class="setting-card">
 
-<h3>Memory Alert Threshold</h3>
+<i class="fa-solid fa-memory"></i>
+
+<h3>
+
+Memory Threshold
+
+</h3>
 
 <input
-type="number"
 id="memoryThreshold"
+type="number"
 value="85"
 min="1"
 max="100">
@@ -144,35 +302,128 @@ max="100">
 </div>
 
 </section>
+<!-- ================================================= -->
+<!-- Configuration -->
+<!-- ================================================= -->
 
-<section class="table-section">
+<section class="bottom-grid">
 
-<div class="table-card">
+<div class="glass-card">
 
-<h2>Current Configuration</h2>
+<div class="card-header">
+
+<div>
+
+<span class="card-tag blue">
+
+Configuration
+
+</span>
+
+<h2>
+
+Current Configuration
+
+</h2>
+
+</div>
+
+<div class="live-badge">
+
+LIVE
+
+</div>
+
+</div>
+
+<div class="table-wrapper">
 
 <table>
+
+<thead>
+
+<tr>
+
+<th>
+
+Setting
+
+</th>
+
+<th>
+
+Current Value
+
+</th>
+
+</tr>
+
+</thead>
 
 <tbody>
 
 <tr>
-<td>Auto Recovery</td>
-<td id="configRecovery">Loading...</td>
+
+<td>
+
+Auto Recovery
+
+</td>
+
+<td id="configRecovery">
+
+Loading...
+
+</td>
+
 </tr>
 
 <tr>
-<td>Dashboard Refresh</td>
-<td id="configRefresh">5 Seconds</td>
+
+<td>
+
+Dashboard Refresh
+
+</td>
+
+<td id="configRefresh">
+
+5 Seconds
+
+</td>
+
 </tr>
 
 <tr>
-<td>CPU Threshold</td>
-<td id="configCPU">85%</td>
+
+<td>
+
+CPU Threshold
+
+</td>
+
+<td id="configCPU">
+
+85%
+
+</td>
+
 </tr>
 
 <tr>
-<td>Memory Threshold</td>
-<td id="configMemory">85%</td>
+
+<td>
+
+Memory Threshold
+
+</td>
+
+<td id="configMemory">
+
+85%
+
+</td>
+
 </tr>
 
 </tbody>
@@ -181,11 +432,134 @@ max="100">
 
 </div>
 
+</div>
+
+<!-- ================================================= -->
+<!-- System Status -->
+<!-- ================================================= -->
+
+<div class="glass-card">
+
+<div class="card-header">
+
+<div>
+
+<span class="card-tag green">
+
+System
+
+</span>
+
+<h2>
+
+Recovery Engine
+
+</h2>
+
+</div>
+
+</div>
+
+<div class="info-card">
+
+<h3>
+
+Auto Recovery
+
+</h3>
+
+<p>
+
+The AI recovery engine continuously monitors
+system health and automatically performs
+corrective actions whenever anomalies are
+detected.
+
+</p>
+
+</div>
+
+<div class="info-card">
+
+<h3>
+
+Monitoring
+
+</h3>
+
+<p>
+
+Monitoring runs continuously and updates
+dashboard metrics according to the refresh
+interval selected above.
+
+</p>
+
+</div>
+
+<div class="info-card">
+
+<h3>
+
+Alert Thresholds
+
+</h3>
+
+<p>
+
+CPU and Memory thresholds determine when
+AutoHeal-AI generates warnings and starts
+predictive recovery workflows.
+
+</p>
+
+</div>
+
+</div>
+
 </section>
+<!-- ================================================= -->
+<!-- Footer -->
+<!-- ================================================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <h3>
+
+            AutoHeal-AI
+
+        </h3>
+
+        <p>
+
+            Intelligent Predictive Monitoring • AI Analytics • Autonomous Self-Healing
+
+        </p>
+
+    </div>
+
+    <div class="footer-right">
+
+        <span>
+
+            Settings Module v2.0
+
+        </span>
+
+    </div>
+
+</footer>
 
 </main>
 
-<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</div>
+
+<!-- ================================================= -->
+<!-- Scripts -->
+<!-- ================================================= -->
+
 <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
 
 </body>

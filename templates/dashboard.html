@@ -1,587 +1,877 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<!-- ==========================================
+                HERO SECTION
+=========================================== -->
 
-    <title>AutoHeal-AI Dashboard</title>
+<section class="hero-section">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <div class="hero-left">
 
-    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+        <span class="hero-badge">
 
-</head>
+            AI Powered Monitoring
 
-<body>
+        </span>
 
-    <!-- ==========================
-            SIDEBAR
-    =========================== -->
+        <h1>
 
-    <aside class="sidebar">
+            AutoHeal-AI
 
-        <div class="logo">
+        </h1>
 
-            <h2>🤖 AutoHeal-AI</h2>
+        <p>
 
-            <p>Predict • Heal • Learn</p>
+            Predictive monitoring, intelligent diagnosis,
+            autonomous recovery and self-learning AI.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="primary-btn">
+
+                <i class="fa-solid fa-play"></i>
+
+                Start Scan
+
+            </button>
+
+            <button class="secondary-btn">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                View Reports
+
+            </button>
 
         </div>
 
-      <nav>
+    </div>
 
-    <ul>
+    <div class="hero-right">
 
-        <li class="active" onclick="window.location.href='/dashboard'">
-            🏠 Dashboard
-        </li>
+        <div class="health-ring">
 
-        <li onclick="window.location.href='/monitoring'">
-            📈 Monitoring
-        </li>
+            <div class="health-inner">
 
-        <li onclick="window.location.href='/ai-analysis'">
-            🤖 AI Analysis
-        </li>
+                <span>
 
-        <li onclick="window.location.href='/incidents'">
-            🚨 Incidents
-        </li>
+                    Overall Health
 
-        <li onclick="window.location.href='/reports'">
-            📊 Reports
-        </li>
+                </span>
 
-        <li onclick="window.location.href='/settings'">
-            ⚙ Settings
-        </li>
+                <h1 id="healthScore">
 
-    </ul>
+                    100%
 
-</nav>
-    </aside>
+                </h1>
 
-    <!-- ==========================
-            MAIN CONTENT
-    =========================== -->
+                <p id="health">
 
-    <main class="main">
-
-        <!-- Header -->
-
-        <header class="topbar">
-
-            <div>
-
-                <h1>System Monitoring Dashboard</h1>
-
-                <p>
-                    AI Powered Predictive Monitoring &
-                    Autonomous Self-Healing
-                </p>
-
-            </div>
-
-            <div class="top-right">
-
-                <span class="status-dot"></span>
-
-                <span>Monitoring Active</span>
-
-                <button id="themeBtn">
-                    🌙 Dark Mode
-                </button>
-
-            </div>
-
-        </header>
-
-        <!-- ======================
-              METRIC CARDS
-        ======================= -->
-
-        <section class="cards">
-            <div class="card">
-    <h3>🚨 Total Incidents</h3>
-    <h1 id="totalIncidents">0</h1>
-</div>
-
-<div class="card">
-    <h3>🔄 Total Recoveries</h3>
-    <h1 id="totalRecoveries">0</h1>
-</div>
-
-<div class="card">
-    <h3>✅ Successful</h3>
-    <h1 id="successfulRecoveries">0</h1>
-</div>
-
-<div class="card">
-    <h3>❌ Failed</h3>
-    <h1 id="failedRecoveries">0</h1>
-</div>
-
-            <div class="card">
-
-                <h3>CPU Usage</h3>
-
-                <h1 id="cpu">0%</h1>
-
-                <p>Processor Utilization</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Memory Usage</h3>
-
-                <h1 id="memory">0%</h1>
-
-                <p>RAM Utilization</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Disk Usage</h3>
-
-                <h1 id="disk">0%</h1>
-
-                <p>Storage Utilization</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Processes</h3>
-
-                <h1 id="processes">0</h1>
-
-                <p>Running Processes</p>
-
-            </div>
-
-        </section>
-
-        <!-- ======================
-              STATUS PANELS
-        ======================= -->
-
-        <section class="status-grid">
-
-            <div class="status-card">
-
-                <h2>🟢 System Health</h2>
-
-<h1 id="healthScore">
-    100%
-</h1>
-
-<h3 id="health">
-    Healthy
-</h3>
-
-<p id="healthStatus">
-
-    AI Health Analysis
-
-</p>
-
-                <h3 id="health">
                     Healthy
-                </h3>
 
-                <p>
-                    Overall machine health.
-                </p>
-
-            </div>
-                        <div class="status-card">
-
-                <h2>🤖 AI Analysis</h2>
-
-                <p><strong>Status</strong></p>
-
-                <h3 id="aiStatus">
-                    Model Not Trained
-                </h3>
-
-                <hr>
-
-                <p><strong>Confidence</strong></p>
-
-                <h3 id="confidence">
-                    0%
-                </h3>
-
-                <hr>
-
-                <p><strong>Root Cause</strong></p>
-
-                <p id="rootCause">
-                    Waiting for analysis...
-                </p>
-
-                <hr>
-
-                <p><strong>Recommended Action</strong></p>
-
-                <p id="recommendedAction">
-                    Waiting...
                 </p>
 
             </div>
 
-<div class="status-card">
-
-    <h2>🔮 Failure Prediction</h2>
-    <div class="status-card">
-
-    <h2>📈 30 Minute Forecast</h2>
-
-    <p>
-
-        Future CPU
-
-    </p>
-
-    <h3 id="futureCPU">
-
-        0%
-
-    </h3>
-
-    <hr>
-
-    <p>
-
-        Future Memory
-
-    </p>
-
-    <h3 id="futureMemory">
-
-        0%
-
-    </h3>
-
-    <hr>
-
-    <p>
-
-        Future Disk
-
-    </p>
-
-    <h3 id="futureDisk">
-
-        0%
-
-    </h3>
-
-    <hr>
-
-    <p>
-
-        Forecast Status
-
-    </p>
-
-    <h3 id="forecastStatus">
-
-        LOW
-
-    </h3>
-
-</div>
-
-    <h3 id="prediction">
-        No Failure Predicted
-    </h3>
-
-    <hr>
-
-    <p><strong>Failure Probability</strong></p>
-
-    <h3 id="failureProbability">
-        0%
-    </h3>
-
-    <hr>
-
-    <p><strong>Risk Level</strong></p>
-
-    <h3 id="riskLevel">
-        LOW
-    </h3>
-
-    <hr>
-
-    <p><strong>Confidence</strong></p>
-
-    <h3 id="failureConfidence">
-        0%
-    </h3>
-
-    <hr>
-
-    <p><strong>Estimated Failure</strong></p>
-
-    <h3 id="failureTime">
-        --
-    </h3>
-
-    <hr>
-
-    <p><strong>Recommendation</strong></p>
-
-    <p id="failureRecommendation">
-
-        System Healthy
-
-    </p>
-    <hr>
-
-<p><strong>Trend</strong></p>
-
-<h3 id="trend">
-    UNKNOWN
-</h3>
-
-<hr>
-
-<p><strong>Trend Analysis</strong></p>
-
-<p id="trendMessage">
-    Waiting...
-</p>
-
-</div>
-
-        </section>
-
-        <!-- ======================
-              ACTIVE ALERTS
-        ======================= -->
-
-        <section class="alert-panel">
-
-            <div class="panel-title">
-
-                🚨 Active Alerts
-
-            </div>
-
-            <ul id="alerts">
-
-                <li>
-                    ✅ No Active Alerts
-                </li>
-
-            </ul>
-
-        </section>
-
-        <!-- ======================
-              LIVE CHARTS
-        ======================= -->
-
-        <section class="graphs">
-
-            <div class="graph-card">
-
-                <h2>CPU Usage Trend</h2>
-
-                <div id="cpuChart"></div>
-
-            </div>
-
-            <div class="graph-card">
-
-                <h2>Memory Usage Trend</h2>
-
-                <div id="memoryChart"></div>
-
-            </div>
-
-        </section>
-
-        <section class="graphs">
-
-            <div class="graph-card">
-
-                <h2>Disk Usage Trend</h2>
-
-                <div id="diskChart"></div>
-
-            </div>
-
-            <div class="graph-card">
-
-                <h2>Network Activity</h2>
-
-                <div id="networkChart"></div>
-
-            </div>
-
-        </section>
-
-                <!-- ======================
-              RECENT METRICS
-        ======================= -->
-
-        <section class="table-section">
-
-            <div class="table-card">
-
-                <h2>📊 Recent Metrics</h2>
-
-                <table id="metricsTable">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Time</th>
-                            <th>CPU</th>
-                            <th>Memory</th>
-                            <th>Disk</th>
-                            <th>Processes</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-        <!-- ======================
-              INCIDENT TIMELINE
-        ======================= -->
-
-        <section class="table-section">
-
-            <div class="table-card">
-
-                <h2>📜 Incident Timeline</h2>
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Time</th>
-                            <th>Incident</th>
-                            <th>Status</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="incidentTable">
-
-                        <tr>
-
-                            <td>--</td>
-                            <td>No incidents detected</td>
-                            <td>✅ Stable</td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-        <!-- ======================
-     RECOVERY CONTROLS
-====================== -->
-
-<section class="cards">
-
-    <!-- Statistics Cards -->
-
-   
-    <!-- Recovery Controls -->
-
-    <div class="card">
-
-        <h3>⚙ Recovery Controls</h3>
-
-        <p>
-            Auto Recovery:
-            <span id="autoRecoveryStatus">ON</span>
-        </p>
-
-        <button id="toggleRecoveryBtn" class="control-btn">
-            Disable Auto Recovery
-        </button>
-
-        <br><br>
-
-        <button id="manualRecoveryBtn" class="control-btn secondary-btn">
-            ▶ Run Recovery Now
-        </button>
+        </div>
 
     </div>
 
 </section>
 
-        <!-- ======================
-     RECOVERY HISTORY
-====================== -->
+<!-- ==========================================
+            LIVE METRICS
+=========================================== -->
 
-<section class="table-section">
+<section class="metric-grid">
 
-    <div class="table-card">
+<div class="metric-card">
 
-        <h2>🛠 Recovery History</h2>
+<i class="fa-solid fa-microchip"></i>
 
-        <table id="recoveryTable">
+<h4>
+
+CPU Usage
+
+</h4>
+
+<h2 id="cpu">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-memory"></i>
+
+<h4>
+
+Memory
+
+</h4>
+
+<h2 id="memory">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-hard-drive"></i>
+
+<h4>
+
+Disk
+
+</h4>
+
+<h2 id="disk">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-server"></i>
+
+<h4>
+
+Processes
+
+</h4>
+
+<h2 id="processes">
+
+0
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-triangle-exclamation"></i>
+
+<h4>
+
+Incidents
+
+</h4>
+
+<h2 id="totalIncidents">
+
+0
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-screwdriver-wrench"></i>
+
+<h4>
+
+Recoveries
+
+</h4>
+
+<h2 id="totalRecoveries">
+
+0
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-circle-check"></i>
+
+<h4>
+
+Successful
+
+</h4>
+
+<h2 id="successfulRecoveries">
+
+0
+
+</h2>
+
+</div>
+
+<div class="metric-card">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+<h4>
+
+Failed
+
+</h4>
+
+<h2 id="failedRecoveries">
+
+0
+
+</h2>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+            AI COMMAND CENTER
+=========================================== -->
+
+<section class="dashboard-grid">
+
+    <!-- AI Intelligence -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag">
+
+                    MACHINE LEARNING
+
+                </span>
+
+                <h2>
+
+                    🤖 AI Intelligence
+
+                </h2>
+
+            </div>
+
+            <div class="live-dot">
+
+                LIVE
+
+            </div>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <label>
+
+                    AI Status
+
+                </label>
+
+                <h3 id="aiStatus">
+
+                    Waiting...
+
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <label>
+
+                    Confidence
+
+                </label>
+
+                <h3 id="confidence">
+
+                    0%
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="description-box">
+
+            <label>
+
+                Root Cause
+
+            </label>
+
+            <p id="rootCause">
+
+                Waiting for AI analysis...
+
+            </p>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="description-box">
+
+            <label>
+
+                Recommended Action
+
+            </label>
+
+            <p id="recommendedAction">
+
+                Waiting...
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Prediction -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag purple">
+
+                    PREDICTIVE AI
+
+                </span>
+
+                <h2>
+
+                    🔮 Failure Prediction
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="prediction-status">
+
+            <h1 id="prediction">
+
+                LOW
+
+            </h1>
+
+        </div>
+
+        <div class="prediction-grid">
+
+            <div>
+
+                <small>
+
+                    Failure Probability
+
+                </small>
+
+                <h3 id="failureProbability">
+
+                    0%
+
+                </h3>
+
+            </div>
+
+            <div>
+
+                <small>
+
+                    Risk Level
+
+                </small>
+
+                <h3 id="riskLevel">
+
+                    LOW
+
+                </h3>
+
+            </div>
+
+            <div>
+
+                <small>
+
+                    Confidence
+
+                </small>
+
+                <h3 id="failureConfidence">
+
+                    0%
+
+                </h3>
+
+            </div>
+
+            <div>
+
+                <small>
+
+                    Estimated Failure
+
+                </small>
+
+                <h3 id="failureTime">
+
+                    --
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <label>
+
+            Recommendation
+
+        </label>
+
+        <p id="failureRecommendation">
+
+            System Healthy
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+            AI FORECAST
+=========================================== -->
+
+<section class="glass-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag green">
+
+                FORECAST
+
+            </span>
+
+            <h2>
+
+                📈 30 Minute Forecast
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="forecast-grid">
+
+        <div class="forecast-card">
+
+            <small>
+
+                Future CPU
+
+            </small>
+
+            <h2 id="futureCPU">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Future Memory
+
+            </small>
+
+            <h2 id="futureMemory">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Future Disk
+
+            </small>
+
+            <h2 id="futureDisk">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Status
+
+            </small>
+
+            <h2 id="forecastStatus">
+
+                LOW
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="trend-box">
+
+        <h3 id="trend">
+
+            UNKNOWN
+
+        </h3>
+
+        <p id="trendMessage">
+
+            Waiting for AI forecast...
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+            ACTIVE ALERTS
+=========================================== -->
+
+<section class="glass-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag red">
+
+                LIVE
+
+            </span>
+
+            <h2>
+
+                🚨 Active Alerts
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div id="alerts" class="alerts-wrapper">
+
+        <div class="alert-item success">
+
+            <div class="alert-icon">
+
+                ✅
+
+            </div>
+
+            <div>
+
+                <h4>
+
+                    No Active Alerts
+
+                </h4>
+
+                <p>
+
+                    Your system is healthy.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ==========================================
+                LIVE ANALYTICS
+=========================================== -->
+
+<section class="charts-grid">
+
+    <!-- CPU Chart -->
+
+    <div class="glass-card chart-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag blue">
+
+                    REAL TIME
+
+                </span>
+
+                <h2>
+
+                    CPU Analytics
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div id="cpuChart"
+             class="chart-box"></div>
+
+    </div>
+
+    <!-- Memory Chart -->
+
+    <div class="glass-card chart-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag green">
+
+                    LIVE
+
+                </span>
+
+                <h2>
+
+                    Memory Analytics
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div id="memoryChart"
+             class="chart-box"></div>
+
+    </div>
+
+</section>
+
+<section class="charts-grid">
+
+    <!-- Disk -->
+
+    <div class="glass-card chart-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag orange">
+
+                    STORAGE
+
+                </span>
+
+                <h2>
+
+                    Disk Analytics
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div id="diskChart"
+             class="chart-box"></div>
+
+    </div>
+
+    <!-- Network -->
+
+    <div class="glass-card chart-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag purple">
+
+                    NETWORK
+
+                </span>
+
+                <h2>
+
+                    Network Activity
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div id="networkChart"
+             class="chart-box"></div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+                RECENT METRICS
+=========================================== -->
+
+<section class="glass-card table-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag">
+
+                HISTORY
+
+            </span>
+
+            <h2>
+
+                Recent Metrics
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="metricsTable">
 
             <thead>
 
-<tr>
+                <tr>
 
-    <th>Time</th>
+                    <th>Time</th>
 
-    <th>Problem</th>
+                    <th>CPU</th>
 
-    <th>Recovery Action</th>
+                    <th>Memory</th>
 
-    <th>Process</th>
+                    <th>Disk</th>
 
-    <th>PID</th>
+                    <th>Processes</th>
 
-    <th>Duration</th>
-
-    <th>Status</th>
-
-</tr>
+                </tr>
 
             </thead>
 
             <tbody>
 
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+                INCIDENT TIMELINE
+=========================================== -->
+
+<section class="glass-card table-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag red">
+
+                INCIDENTS
+
+            </span>
+
+            <h2>
+
+                Incident Timeline
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
                 <tr>
 
-                    <td colspan="4">
-                        No recovery actions yet.
+                    <th>Time</th>
+
+                    <th>Incident</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="incidentTable">
+
+                <tr>
+
+                    <td colspan="3">
+
+                        No incidents detected.
+
                     </td>
 
                 </tr>
@@ -594,38 +884,263 @@
 
 </section>
 
-        <!-- ======================
-              FOOTER
-        ======================= -->
+<!-- ==========================================
+                RECOVERY CENTER
+=========================================== -->
 
-        <footer class="footer">
+<section class="dashboard-grid">
+
+    <div class="glass-card">
+
+        <div class="card-header">
 
             <div>
 
-                <strong>AutoHeal-AI</strong>
+                <span class="card-tag green">
+
+                    AUTO HEAL
+
+                </span>
+
+                <h2>
+
+                    Recovery Controls
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="recovery-box">
+
+            <p>
+
+                Auto Recovery Status
+
+            </p>
+
+            <h2 id="autoRecoveryStatus">
+
+                ON
+
+            </h2>
+
+        </div>
+
+        <button
+            id="toggleRecoveryBtn"
+            class="primary-btn">
+
+            Toggle Auto Recovery
+
+        </button>
+
+        <button
+            id="manualRecoveryBtn"
+            class="secondary-btn">
+
+            Run Recovery
+
+        </button>
+
+    </div>
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag blue">
+
+                    ENGINE
+
+                </span>
+
+                <h2>
+
+                    Recovery Engine
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="engine-status">
+
+            <div>
+
+                <span>
+
+                    Engine
+
+                </span>
+
+                <strong>
+
+                    Autonomous
+
+                </strong>
 
             </div>
 
             <div>
 
-                AI Powered Predictive Monitoring &
-                Autonomous Self-Healing System
+                <span>
+
+                    Verification
+
+                </span>
+
+                <strong>
+
+                    Enabled
+
+                </strong>
 
             </div>
 
             <div>
 
-                Version 1.0
+                <span>
+
+                    Retry Logic
+
+                </span>
+
+                <strong>
+
+                    Smart Retry
+
+                </strong>
 
             </div>
 
-        </footer>
+            <div>
 
-    </main>
+                <span>
 
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+                    AI Learning
 
-</body>
+                </span>
 
-</html>
+                <strong>
+
+                    Active
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+                RECOVERY HISTORY
+=========================================== -->
+
+<section class="glass-card table-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag">
+
+                HISTORY
+
+            </span>
+
+            <h2>
+
+                Recovery History
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="recoveryTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Time</th>
+
+                    <th>Problem</th>
+
+                    <th>Recovery</th>
+
+                    <th>Process</th>
+
+                    <th>PID</th>
+
+                    <th>Duration</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="7">
+
+                        No recovery actions yet.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+                FOOTER
+=========================================== -->
+
+<footer class="footer">
+
+    <div>
+
+        <h3>
+
+            AutoHeal-AI
+
+        </h3>
+
+        <p>
+
+            AI Powered Predictive Monitoring &
+            Autonomous Self-Healing Platform
+
+        </p>
+
+    </div>
+
+    <span>
+
+        Version 1.0
+
+    </span>
+
+</footer>
+
+{% endblock %}

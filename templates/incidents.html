@@ -3,119 +3,563 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Incidents</title>
+    <title>Incidents | AutoHeal-AI</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/incidents.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<aside class="sidebar">
+<div class="background">
 
-<div class="logo">
+    <div class="gradient one"></div>
 
-<h2>🤖 AutoHeal-AI</h2>
+    <div class="gradient two"></div>
 
-<p>Predict • Heal • Learn</p>
+    <div class="gradient three"></div>
 
 </div>
 
-<nav>
+<div class="dashboard-container">
 
-<ul>
+<!-- =======================================================
+                        SIDEBAR
+======================================================= -->
 
-<li onclick="location.href='/dashboard'">
-🏠 Dashboard
-</li>
+<aside class="sidebar">
 
-<li onclick="location.href='/monitoring'">
-📈 Monitoring
-</li>
+    <div class="logo">
 
-<li onclick="location.href='/ai-analysis'">
-🤖 AI Analysis
-</li>
+        <div class="logo-icon">
 
-<li class="active">
-🚨 Incidents
-</li>
+            <i class="fa-solid fa-brain"></i>
 
-<li onclick="location.href='/reports'">
-📊 Reports
-</li>
+        </div>
 
-<li onclick="location.href='/settings'">
-⚙ Settings
-</li>
+        <div>
 
-</ul>
+            <h2>AutoHeal-AI</h2>
 
-</nav>
+            <span>Predict • Heal • Learn</span>
+
+        </div>
+
+    </div>
+
+    <nav class="menu">
+
+        <a href="/dashboard">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a href="/monitoring">
+
+            <i class="fa-solid fa-desktop"></i>
+
+            <span>Monitoring</span>
+
+        </a>
+
+        <a href="/ai-analysis">
+
+            <i class="fa-solid fa-microchip"></i>
+
+            <span>AI Analysis</span>
+
+        </a>
+
+        <a href="/incidents" class="active">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <span>Incidents</span>
+
+        </a>
+
+        <a href="/reports">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            <span>Reports</span>
+
+        </a>
+
+        <a href="/settings">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Settings</span>
+
+        </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+
+        <div class="online-status">
+
+            <span class="pulse"></span>
+
+            Incident Engine Active
+
+        </div>
+
+    </div>
 
 </aside>
+
+<!-- =======================================================
+                        MAIN
+======================================================= -->
 
 <main class="main">
 
 <header class="topbar">
 
-    <div>
+    <div class="topbar-left">
 
-        <h1>🚨 Incident History</h1>
+        <h1>
 
-        <p>Every anomaly detected by AutoHeal-AI</p>
+            Incident Center
+
+        </h1>
+
+        <p>
+
+            Every anomaly detected, analyzed and recorded by AutoHeal-AI.
+
+        </p>
 
     </div>
 
-    <div class="top-right">
+    <div class="topbar-right">
 
-        <button id="themeBtn">
-            🌙 Dark Mode
+        <button id="themeBtn" class="topbar-btn">
+
+            <i class="fa-solid fa-moon"></i>
+
         </button>
 
     </div>
 
 </header>
 
-<section class="table-section">
+<!-- =======================================================
+                        HERO
+======================================================= -->
 
-<div class="table-card">
+<section class="hero-section">
 
-<h2>Incident Log</h2>
+    <div class="hero-left">
 
-<table id="incidentTable">
+        <span class="hero-badge">
 
-<thead>
-    <tr>
-        <th>Time</th>
-        <th>Prediction</th>
-        <th>Confidence</th>
-        <th>Root Cause</th>
-        <th>Recommended Action</th>
-        <th>Status</th>
-    </tr>
-</thead>
+            Incident Intelligence
 
-<tbody>
-    <tr>
-        <td colspan="6">Loading...</td>
-    </tr>
-</tbody>
+        </span>
 
-</table>
+        <h1>
 
-</div>
+            Live Incident History
+
+        </h1>
+
+        <p>
+
+            AutoHeal-AI continuously stores every anomaly,
+            prediction, AI decision, root cause analysis and
+            recovery recommendation for future learning and
+            autonomous self-healing.
+
+        </p>
+
+    </div>
+
+    <div class="hero-right">
+
+        <div class="status-ring">
+
+            <div class="status-inner">
+
+                <span>
+
+                    Total Incidents
+
+                </span>
+
+                <h2 id="totalIncidents">
+
+                    0
+
+                </h2>
+
+                <p>
+
+                    Recorded
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
 
+<!-- =======================================================
+                    SUMMARY CARDS
+======================================================= -->
+
+<section class="metric-grid">
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-bug"></i>
+
+        <h4>
+
+            Total Incidents
+
+        </h4>
+
+        <h2 id="cardIncidents">
+
+            0
+
+        </h2>
+
+    </div>
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        <h4>
+
+            Critical Alerts
+
+        </h4>
+
+        <h2 id="criticalIncidents">
+
+            0
+
+        </h2>
+
+    </div>
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <h4>
+
+            AI Accuracy
+
+        </h4>
+
+        <h2>
+
+            99%
+
+        </h2>
+
+    </div>
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-clock"></i>
+
+        <h4>
+
+            Live Monitoring
+
+        </h4>
+
+        <h2>
+
+            24/7
+
+        </h2>
+
+    </div>
+
+</section>
+<!-- =======================================================
+                    INCIDENT TABLE
+======================================================= -->
+
+<section class="glass-card table-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag red">
+
+                Incident Log
+
+            </span>
+
+            <h2>
+
+                AI Incident Timeline
+
+            </h2>
+
+        </div>
+
+        <div class="live-badge">
+
+            LIVE
+
+        </div>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table id="incidentTable">
+
+            <thead>
+
+                <tr>
+
+                    <th>Time</th>
+
+                    <th>Prediction</th>
+
+                    <th>Confidence</th>
+
+                    <th>Root Cause</th>
+
+                    <th>Recommended Action</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td colspan="6">
+
+                        Loading incidents...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+                    INCIDENT INFO
+======================================================= -->
+
+<section class="dashboard-grid">
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag blue">
+
+                    AI Learning
+
+                </span>
+
+                <h2>
+
+                    Incident Intelligence
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="trend-box">
+
+            <h3>
+
+                How Incidents are Generated
+
+            </h3>
+
+            <p>
+
+                Every incident recorded here is automatically generated by the
+                AutoHeal-AI engine whenever abnormal system behaviour is detected.
+                The AI evaluates CPU, Memory, Disk, Network and Running Processes,
+                predicts the possibility of failure, determines the root cause,
+                and stores the recommended recovery action for future learning.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag green">
+
+                    System Status
+
+                </span>
+
+                <h2>
+
+                    Detection Engine
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="engine-status">
+
+            <div>
+
+                <span>
+
+                    AI Engine
+
+                </span>
+
+                <strong>
+
+                    ACTIVE
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Detection Mode
+
+                </span>
+
+                <strong>
+
+                    Real-Time
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Scan Interval
+
+                </span>
+
+                <strong>
+
+                    5 Seconds
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Database
+
+                </span>
+
+                <strong>
+
+                    Connected
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+                    FOOTER
+======================================================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <h3>
+
+            AutoHeal-AI
+
+        </h3>
+
+        <p>
+
+            AI-powered Incident Detection & Intelligent Event History
+
+        </p>
+
+    </div>
+
+    <div>
+
+        <span>
+
+            Incident Module v2.0
+
+        </span>
+
+    </div>
+
+</footer>
+
 </main>
 
+</div>
+
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
 <script src="{{ url_for('static', filename='js/incidents.js') }}"></script>
 
 </body>

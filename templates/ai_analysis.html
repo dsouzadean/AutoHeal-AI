@@ -5,183 +5,666 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>AI Analysis</title>
+    <title>AI Analysis | AutoHeal-AI</title>
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/dashboard.css') }}">
+          href="{{ url_for('static', filename='css/ai_analysis.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
 
+<!-- ==========================================================
+                        BACKGROUND
+=========================================================== -->
+
+<div class="background">
+
+    <div class="gradient one"></div>
+
+    <div class="gradient two"></div>
+
+    <div class="gradient three"></div>
+
+</div>
+
+<div class="dashboard-container">
+
+<!-- ==========================================================
+                        SIDEBAR
+=========================================================== -->
+
 <aside class="sidebar">
 
     <div class="logo">
-        <h2>🤖 AutoHeal-AI</h2>
-        <p>Predict • Heal • Learn</p>
+
+        <div class="logo-icon">
+
+            <i class="fa-solid fa-brain"></i>
+
+        </div>
+
+        <div>
+
+            <h2>AutoHeal-AI</h2>
+
+            <span>Predict • Heal • Learn</span>
+
+        </div>
+
     </div>
 
-    <nav>
+    <nav class="menu">
 
-        <ul>
+        <a href="/dashboard">
 
-            <li onclick="window.location.href='/dashboard'">
-                🏠 Dashboard
-            </li>
+            <i class="fa-solid fa-chart-line"></i>
 
-            <li onclick="window.location.href='/monitoring'">
-                📈 Monitoring
-            </li>
+            <span>Dashboard</span>
 
-            <li class="active">
-                🤖 AI Analysis
-            </li>
+        </a>
 
-            <li onclick="window.location.href='/incidents'">
-                🚨 Incidents
-            </li>
+        <a href="/monitoring">
 
-            <li onclick="window.location.href='/reports'">
-                📊 Reports
-            </li>
+            <i class="fa-solid fa-desktop"></i>
 
-            <li onclick="window.location.href='/settings'">
-                ⚙ Settings
-            </li>
+            <span>Monitoring</span>
 
-        </ul>
+        </a>
+
+        <a href="/ai-analysis" class="active">
+
+            <i class="fa-solid fa-microchip"></i>
+
+            <span>AI Analysis</span>
+
+        </a>
+
+        <a href="/incidents">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <span>Incidents</span>
+
+        </a>
+
+        <a href="/reports">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            <span>Reports</span>
+
+        </a>
+
+        <a href="/settings">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Settings</span>
+
+        </a>
 
     </nav>
 
-</aside>
+    <div class="sidebar-footer">
 
-<main class="main">
+        <div class="online-status">
 
-<header class="topbar">
+            <span class="pulse"></span>
 
-    <div>
+            AI Engine Online
 
-        <h1>🤖 AI Analysis Engine</h1>
-
-        <p>Live anomaly detection, explainable AI and root cause analysis.</p>
+        </div>
 
     </div>
 
-    <div class="top-right">
+</aside>
 
-        <button id="themeBtn">
-            🌙 Dark Mode
+<!-- ==========================================================
+                        MAIN
+=========================================================== -->
+
+<main class="main">
+
+<!-- ==========================================================
+                        TOPBAR
+=========================================================== -->
+
+<header class="topbar">
+
+    <div class="topbar-left">
+
+        <h1>
+
+            AI Analysis Center
+
+        </h1>
+
+        <p>
+
+            Live Explainable Artificial Intelligence • Root Cause Detection • Predictive Intelligence
+
+        </p>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <button id="themeBtn" class="topbar-btn">
+
+            <i class="fa-solid fa-moon"></i>
+
         </button>
 
     </div>
 
 </header>
 
-<section class="cards">
+<!-- ==========================================================
+                        HERO
+=========================================================== -->
 
-    <div class="card">
-        <h3>AI Status</h3>
-        <h1 id="aiStatus">Loading...</h1>
+<section class="hero-section">
+
+    <div class="hero-left">
+
+        <span class="hero-badge">
+
+            Artificial Intelligence Engine
+
+        </span>
+
+        <h1 id="aiStatus">
+
+            Loading...
+
+        </h1>
+
+        <p>
+
+            AutoHeal-AI continuously analyzes thousands of system metrics,
+            detects abnormal behaviour, predicts failures before they happen,
+            identifies the root cause and recommends autonomous recovery
+            actions using Machine Learning.
+
+        </p>
+
     </div>
 
-    <div class="card">
-        <h3>Confidence</h3>
-        <h1 id="confidence">0%</h1>
-    </div>
+    <div class="hero-right">
 
-    <div class="card">
-        <h3>Failure Probability</h3>
-        <h1 id="failureProbability">0%</h1>
-    </div>
+        <div class="status-ring">
 
-    <div class="card">
-        <h3>Risk Level</h3>
-        <h1 id="riskLevel">LOW</h1>
+            <div class="status-inner">
+
+                <span>
+
+                    AI Confidence
+
+                </span>
+
+                <h2 id="confidence">
+
+                    0%
+
+                </h2>
+
+                <p>
+
+                    Live Model
+
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
 
 </section>
 
-<section class="status-grid">
+<!-- ==========================================================
+                        METRICS
+=========================================================== -->
 
-    <div class="status-card">
+<section class="metric-grid">
 
-        <h2>Root Cause</h2>
+    <div class="metric-card">
 
-        <h3 id="rootCause">
-            Waiting...
-        </h3>
+        <i class="fa-solid fa-bolt"></i>
+
+        <h4>
+
+            Failure Probability
+
+        </h4>
+
+        <h2 id="failureProbability">
+
+            0%
+
+        </h2>
 
     </div>
 
-    <div class="status-card">
+    <div class="metric-card">
 
-        <h2>Recommended Action</h2>
+        <i class="fa-solid fa-shield-halved"></i>
 
-        <h3 id="recommendedAction">
-            Waiting...
-        </h3>
+        <h4>
+
+            Risk Level
+
+        </h4>
+
+        <h2 id="riskLevel">
+
+            LOW
+
+        </h2>
+
+    </div>
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <h4>
+
+            AI Confidence
+
+        </h4>
+
+        <h2 id="confidenceCard">
+
+            0%
+
+        </h2>
+
+    </div>
+
+    <div class="metric-card">
+
+        <i class="fa-solid fa-microchip"></i>
+
+        <h4>
+
+            AI Engine
+
+        </h4>
+
+        <h2>
+
+            ACTIVE
+
+        </h2>
+
+    </div>
+
+</section>
+<!-- ==========================================================
+                    AI ANALYSIS GRID
+========================================================== -->
+
+<section class="dashboard-grid">
+
+    <!-- ================= Root Cause ================= -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag blue">
+
+                    Explainable AI
+
+                </span>
+
+                <h2>
+
+                    Root Cause Analysis
+
+                </h2>
+
+            </div>
+
+            <span class="live-badge">
+
+                LIVE
+
+            </span>
+
+        </div>
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <label>
+
+                    Root Cause
+
+                </label>
+
+                <h3 id="rootCause">
+
+                    Waiting...
+
+                </h3>
+
+            </div>
+
+            <div class="info-box">
+
+                <label>
+
+                    AI Confidence
+
+                </label>
+
+                <h3 id="confidenceValue">
+
+                    0%
+
+                </h3>
+
+            </div>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="description-box">
+
+            <label>
+
+                Recommended Action
+
+            </label>
+
+            <p id="recommendedAction">
+
+                Waiting for AI recommendation...
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- ================= Prediction ================= -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag green">
+
+                    Prediction
+
+                </span>
+
+                <h2>
+
+                    AI Decision
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="prediction-status">
+
+            <h1 id="riskCircle">
+
+                LOW
+
+            </h1>
+
+        </div>
+
+        <div class="prediction-grid">
+
+            <div>
+
+                <small>
+
+                    Failure Probability
+
+                </small>
+
+                <h3 id="failureProbabilityCard">
+
+                    0%
+
+                </h3>
+
+            </div>
+
+            <div>
+
+                <small>
+
+                    Risk Level
+
+                </small>
+
+                <h3 id="riskLevelCard">
+
+                    LOW
+
+                </h3>
+
+            </div>
+
+        </div>
 
     </div>
 
 </section>
 
-<section class="cards">
+<!-- ==========================================================
+                    PROCESS ANALYSIS
+========================================================== -->
 
-    <div class="card">
+<section class="glass-card">
 
-        <h3>🖥 Suspected Process</h3>
+    <div class="card-header">
 
-        <p><strong>Process</strong></p>
-        <h2 id="suspectProcess">Loading...</h2>
+        <div>
 
-        <hr>
+            <span class="card-tag orange">
 
-        <p><strong>PID</strong></p>
-        <h2 id="suspectPid">-</h2>
+                Live Process
 
-        <hr>
+            </span>
 
-        <p><strong>Memory Usage</strong></p>
-        <h2 id="processMemory">0%</h2>
+            <h2>
 
-        <hr>
+                Suspected Process
 
-        <p><strong>CPU Usage</strong></p>
-        <h2 id="processCpu">0%</h2>
+            </h2>
+
+        </div>
 
     </div>
 
-    <div class="card">
+    <div class="engine-status">
 
-        <h3>🧠 Explainable AI</h3>
+        <div>
 
-        <table style="width:100%;">
+            <span>
 
-            <tr>
-                <td>CPU Contribution</td>
-                <td id="cpuContribution">0%</td>
-            </tr>
+                Process Name
 
-            <tr>
-                <td>Memory Contribution</td>
-                <td id="memoryContribution">0%</td>
-            </tr>
+            </span>
 
-            <tr>
-                <td>Disk Contribution</td>
-                <td id="diskContribution">0%</td>
-            </tr>
+            <strong id="suspectProcess">
 
-            <tr>
-                <td>Process Contribution</td>
-                <td id="processContribution">0%</td>
-            </tr>
+                Loading...
 
-        </table>
+            </strong>
 
-        <br>
+        </div>
+
+        <div>
+
+            <span>
+
+                Process ID
+
+            </span>
+
+            <strong id="suspectPid">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div>
+
+            <span>
+
+                CPU Usage
+
+            </span>
+
+            <strong id="processCpu">
+
+                0%
+
+            </strong>
+
+        </div>
+
+        <div>
+
+            <span>
+
+                Memory Usage
+
+            </span>
+
+            <strong id="processMemory">
+
+                0%
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================================
+                    EXPLAINABLE AI
+========================================================== -->
+
+<section class="glass-card">
+
+    <div class="card-header">
+
+        <div>
+
+            <span class="card-tag purple">
+
+                Explainable AI
+
+            </span>
+
+            <h2>
+
+                Feature Importance
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="forecast-grid">
+
+        <div class="forecast-card">
+
+            <small>
+
+                CPU
+
+            </small>
+
+            <h2 id="cpuContribution">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Memory
+
+            </small>
+
+            <h2 id="memoryContribution">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Disk
+
+            </small>
+
+            <h2 id="diskContribution">
+
+                0%
+
+            </h2>
+
+        </div>
+
+        <div class="forecast-card">
+
+            <small>
+
+                Processes
+
+            </small>
+
+            <h2 id="processContribution">
+
+                0%
+
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="trend-box">
 
         <h3>
 
@@ -189,19 +672,213 @@
 
         </h3>
 
-        <h2 id="primaryCause">
+        <p id="primaryCause">
 
             Unknown
 
-        </h2>
+        </p>
+
+    </div>
+
+</section>
+<!-- ==========================================================
+                    AI MODEL SUMMARY
+========================================================== -->
+
+<section class="dashboard-grid">
+
+    <!-- ================= AI Model ================= -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag green">
+
+                    Machine Learning
+
+                </span>
+
+                <h2>
+
+                    AI Model Summary
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="engine-status">
+
+            <div>
+
+                <span>
+
+                    Model Status
+
+                </span>
+
+                <strong id="modelStatus">
+
+                    ACTIVE
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Prediction Engine
+
+                </span>
+
+                <strong>
+
+                    Online
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Last Analysis
+
+                </span>
+
+                <strong id="lastAnalysis">
+
+                    Just Now
+
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>
+
+                    Update Interval
+
+                </span>
+
+                <strong>
+
+                    5 Seconds
+
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= AI Health ================= -->
+
+    <div class="glass-card">
+
+        <div class="card-header">
+
+            <div>
+
+                <span class="card-tag blue">
+
+                    Engine Health
+
+                </span>
+
+                <h2>
+
+                    AI Health
+
+                </h2>
+
+            </div>
+
+        </div>
+
+        <div class="prediction-status">
+
+            <h1 id="healthCircle">
+
+                100%
+
+            </h1>
+
+        </div>
+
+        <div class="trend-box">
+
+            <h3>
+
+                AI Engine Status
+
+            </h3>
+
+            <p>
+
+                AutoHeal-AI is continuously monitoring your
+                computer, detecting anomalies, identifying
+                root causes and recommending autonomous
+                recovery actions using Machine Learning.
+
+            </p>
+
+        </div>
 
     </div>
 
 </section>
 
+<!-- ==========================================================
+                    FOOTER
+========================================================== -->
+
+<footer class="footer">
+
+    <div>
+
+        <h3>
+
+            AutoHeal-AI
+
+        </h3>
+
+        <p>
+
+            Artificial Intelligence Powered Predictive
+            Monitoring & Autonomous Self-Healing System
+
+        </p>
+
+    </div>
+
+    <div>
+
+        <span>
+
+            AI Analysis Module v2.0
+
+        </span>
+
+    </div>
+
+</footer>
+
 </main>
 
+</div>
+
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+
 <script src="{{ url_for('static', filename='js/ai_analysis.js') }}"></script>
 
 </body>

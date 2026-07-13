@@ -1,0 +1,1680 @@
+/* ==========================================================
+                    AutoHeal-AI
+                  AI Analysis Center
+========================================================== */
+
+:root{
+
+    --bg:#070B14;
+    --sidebar:#0E1525;
+
+    --card:#121B2D;
+    --card2:#182338;
+
+    --primary:#3B82F6;
+    --secondary:#2563EB;
+
+    --green:#22C55E;
+    --orange:#F59E0B;
+    --red:#EF4444;
+    --purple:#8B5CF6;
+
+    --text:#F8FAFC;
+    --muted:#94A3B8;
+
+    --border:rgba(255,255,255,.06);
+
+    --radius:24px;
+
+    --transition:.35s ease;
+
+}
+
+/* ==========================================================
+                    RESET
+========================================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    font-family:"Inter","Segoe UI",sans-serif;
+
+    overflow-x:hidden;
+
+}
+
+/* ==========================================================
+                    BACKGROUND
+========================================================== */
+
+.background{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    z-index:-1;
+
+}
+
+.gradient{
+
+    position:absolute;
+
+    width:800px;
+
+    height:800px;
+
+    border-radius:50%;
+
+    filter:blur(180px);
+
+    opacity:.18;
+
+}
+
+.gradient.one{
+
+    background:#2563EB;
+
+    top:-250px;
+
+    left:-180px;
+
+}
+
+.gradient.two{
+
+    background:#8B5CF6;
+
+    right:-220px;
+
+    bottom:-200px;
+
+}
+
+.gradient.three{
+
+    background:#22C55E;
+
+    left:40%;
+
+    bottom:10%;
+
+    opacity:.06;
+
+}
+
+/* ==========================================================
+                    LAYOUT
+========================================================== */
+
+.dashboard-container{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/* ==========================================================
+                    SIDEBAR
+========================================================== */
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:280px;
+
+    height:100vh;
+
+    background:rgba(14,21,37,.95);
+
+    backdrop-filter:blur(22px);
+
+    border-right:1px solid var(--border);
+
+    padding:32px;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    margin-bottom:50px;
+
+}
+
+.logo-icon{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    color:white;
+
+    font-size:28px;
+
+    box-shadow:0 0 30px rgba(59,130,246,.35);
+
+}
+
+.logo h2{
+
+    color:white;
+
+    font-size:23px;
+
+}
+
+.logo span{
+
+    display:block;
+
+    color:var(--muted);
+
+    margin-top:4px;
+
+    font-size:13px;
+
+}
+
+/* ==========================================================
+                    MENU
+========================================================== */
+
+.menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.menu a{
+
+    text-decoration:none;
+
+    color:var(--muted);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:16px 18px;
+
+    border-radius:18px;
+
+    transition:.35s;
+
+}
+
+.menu a:hover{
+
+    background:#1B2945;
+
+    color:white;
+
+    transform:translateX(6px);
+
+}
+
+.menu a.active{
+
+    color:white;
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+    box-shadow:0 15px 35px rgba(37,99,235,.35);
+
+}
+
+.sidebar-footer{
+
+    margin-top:auto;
+
+}
+
+.online-status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:#D1FAE5;
+
+    font-size:14px;
+
+}
+
+.pulse{
+
+    width:12px;
+
+    height:12px;
+
+    border-radius:50%;
+
+    background:var(--green);
+
+    animation:pulse 2s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        box-shadow:0 0 0 0 rgba(34,197,94,.7);
+
+    }
+
+    70%{
+
+        box-shadow:0 0 0 15px rgba(34,197,94,0);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 0 rgba(34,197,94,0);
+
+    }
+
+}
+
+/* ==========================================================
+                    MAIN
+========================================================== */
+
+.main{
+
+    margin-left:280px;
+
+    width:calc(100% - 280px);
+
+    padding:50px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:38px;
+
+}
+/* ==========================================================
+                    TOP BAR
+========================================================== */
+
+.topbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:30px;
+
+}
+
+.topbar-left h1{
+
+    color:var(--primary);
+
+    font-size:42px;
+
+    font-weight:800;
+
+    margin-bottom:10px;
+
+}
+
+.topbar-left p{
+
+    color:var(--muted);
+
+    font-size:16px;
+
+    line-height:1.8;
+
+}
+
+.topbar-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.topbar-btn{
+
+    width:54px;
+
+    height:54px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:var(--card);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    font-size:18px;
+
+}
+
+.topbar-btn:hover{
+
+    background:var(--primary);
+
+    transform:translateY(-4px);
+
+    box-shadow:0 18px 35px rgba(37,99,235,.35);
+
+}
+
+/* ==========================================================
+                    HERO
+========================================================== */
+
+.hero-section{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:34px;
+
+}
+
+.hero-left{
+
+    background:linear-gradient(
+        135deg,
+        #121D31,
+        #1B2945
+    );
+
+    border-radius:30px;
+
+    padding:42px;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 30px 60px rgba(0,0,0,.35);
+
+}
+
+.hero-badge{
+
+    display:inline-block;
+
+    padding:10px 20px;
+
+    border-radius:30px;
+
+    background:rgba(59,130,246,.15);
+
+    color:#60A5FA;
+
+    font-size:13px;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+
+    margin-bottom:24px;
+
+}
+
+.hero-left h1{
+
+    font-size:66px;
+
+    color:white;
+
+    margin-bottom:20px;
+
+    font-weight:800;
+
+}
+
+.hero-left p{
+
+    color:var(--muted);
+
+    line-height:1.9;
+
+    font-size:16px;
+
+    max-width:650px;
+
+}
+
+.hero-right{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(
+        145deg,
+        #121D31,
+        #1A2845
+    );
+
+    border-radius:30px;
+
+    border:1px solid var(--border);
+
+    box-shadow:0 30px 60px rgba(0,0,0,.35);
+
+}
+
+/* ==========================================================
+                AI CONFIDENCE RING
+========================================================== */
+
+.status-ring{
+
+    width:250px;
+
+    height:250px;
+
+    border-radius:50%;
+
+    background:conic-gradient(
+
+        #3B82F6 0deg,
+
+        #3B82F6 320deg,
+
+        rgba(255,255,255,.08) 320deg
+
+    );
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    animation:ringRotate 16s linear infinite;
+
+}
+
+.status-inner{
+
+    width:195px;
+
+    height:195px;
+
+    border-radius:50%;
+
+    background:#0E172A;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.status-inner span{
+
+    color:var(--muted);
+
+    font-size:14px;
+
+}
+
+.status-inner h2{
+
+    color:white;
+
+    font-size:46px;
+
+    font-weight:800;
+
+    margin:10px 0;
+
+}
+
+.status-inner p{
+
+    color:var(--green);
+
+    font-weight:700;
+
+}
+
+@keyframes ringRotate{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* ==========================================================
+                    METRIC GRID
+========================================================== */
+
+.metric-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:28px;
+
+}
+
+.metric-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:linear-gradient(
+        145deg,
+        #111B2D,
+        #182338
+    );
+
+    border-radius:24px;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    padding:30px;
+
+    transition:.35s;
+
+}
+
+.metric-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+
+    height:180px;
+
+    top:-90px;
+
+    right:-90px;
+
+    border-radius:50%;
+
+    background:rgba(59,130,246,.08);
+
+}
+
+.metric-card:hover{
+
+    transform:translateY(-8px);
+
+    background:#1D2C49;
+
+    box-shadow:0 25px 55px rgba(0,0,0,.40);
+
+}
+
+.metric-card i{
+
+    font-size:34px;
+
+    color:var(--primary);
+
+    margin-bottom:24px;
+
+}
+
+.metric-card h4{
+
+    color:var(--muted);
+
+    margin-bottom:14px;
+
+    font-size:15px;
+
+}
+
+.metric-card h2{
+
+    color:white;
+
+    font-size:38px;
+
+    font-weight:800;
+
+}
+/* ==========================================================
+                    DASHBOARD GRID
+========================================================== */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:32px;
+
+    align-items:start;
+
+}
+
+/* ==========================================================
+                    GLASS CARD
+========================================================== */
+
+.glass-card{
+
+    background:rgba(18,27,45,.92);
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:28px;
+
+    padding:34px;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.35);
+
+    transition:all .35s ease;
+
+}
+
+.glass-card:hover{
+
+    transform:translateY(-6px);
+
+    background:#1A2846;
+
+}
+
+/* ==========================================================
+                    CARD HEADER
+========================================================== */
+
+.card-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.card-header h2{
+
+    color:white;
+
+    font-size:26px;
+
+    font-weight:700;
+
+    margin-top:10px;
+
+}
+
+.card-tag{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:40px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+.card-tag.blue{
+
+    background:rgba(59,130,246,.15);
+
+    color:#60A5FA;
+
+}
+
+.card-tag.green{
+
+    background:rgba(34,197,94,.15);
+
+    color:#4ADE80;
+
+}
+
+.card-tag.orange{
+
+    background:rgba(245,158,11,.15);
+
+    color:#FBBF24;
+
+}
+
+.card-tag.purple{
+
+    background:rgba(139,92,246,.15);
+
+    color:#C084FC;
+
+}
+
+/* ==========================================================
+                    LIVE BADGE
+========================================================== */
+
+.live-badge{
+
+    background:#22C55E;
+
+    color:white;
+
+    padding:8px 18px;
+
+    border-radius:40px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    animation:pulseBadge 2s infinite;
+
+}
+
+@keyframes pulseBadge{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ==========================================================
+                    INFO GRID
+========================================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
+
+    margin-bottom:25px;
+
+}
+
+.info-box{
+
+    background:#1B2942;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    padding:24px;
+
+    transition:.35s;
+
+}
+
+.info-box:hover{
+
+    background:#243654;
+
+    transform:translateY(-4px);
+
+}
+
+.info-box label{
+
+    display:block;
+
+    color:var(--muted);
+
+    font-size:14px;
+
+    margin-bottom:12px;
+
+}
+
+.info-box h3{
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+                    DIVIDER
+========================================================== */
+
+.divider{
+
+    width:100%;
+
+    height:1px;
+
+    background:rgba(255,255,255,.08);
+
+    margin:28px 0;
+
+}
+
+/* ==========================================================
+                    DESCRIPTION
+========================================================== */
+
+.description-box label{
+
+    display:block;
+
+    color:#CBD5E1;
+
+    font-size:15px;
+
+    margin-bottom:14px;
+
+}
+
+.description-box p{
+
+    color:var(--muted);
+
+    line-height:1.9;
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+                    PREDICTION PANEL
+========================================================== */
+
+.prediction-status{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:20px 0 35px;
+
+}
+
+.prediction-status h1{
+
+    width:170px;
+
+    height:170px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:linear-gradient(
+        135deg,
+        #22C55E,
+        #16A34A
+    );
+
+    color:white;
+
+    font-size:42px;
+
+    font-weight:800;
+
+    box-shadow:0 0 40px rgba(34,197,94,.30);
+
+}
+
+.prediction-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.prediction-grid div{
+
+    background:#1B2942;
+
+    border-radius:18px;
+
+    padding:20px;
+
+}
+
+.prediction-grid small{
+
+    display:block;
+
+    color:var(--muted);
+
+    margin-bottom:10px;
+
+}
+
+.prediction-grid h3{
+
+    color:white;
+
+    font-size:26px;
+
+    font-weight:700;
+
+}
+/* ==========================================================
+                    ENGINE STATUS
+========================================================== */
+
+.engine-status{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:22px;
+
+}
+
+.engine-status div{
+
+    background:#1B2942;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    padding:24px;
+
+    transition:.35s;
+
+}
+
+.engine-status div:hover{
+
+    background:#243654;
+
+    transform:translateY(-5px);
+
+}
+
+.engine-status span{
+
+    display:block;
+
+    color:var(--muted);
+
+    margin-bottom:10px;
+
+    font-size:14px;
+
+}
+
+.engine-status strong{
+
+    color:white;
+
+    font-size:19px;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+                    FORECAST GRID
+========================================================== */
+
+.forecast-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:22px;
+
+    margin-top:20px;
+
+}
+
+.forecast-card{
+
+    background:#1B2942;
+
+    border-radius:20px;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    padding:24px;
+
+    text-align:center;
+
+    transition:.35s;
+
+}
+
+.forecast-card:hover{
+
+    background:#243654;
+
+    transform:translateY(-6px);
+
+}
+
+.forecast-card small{
+
+    display:block;
+
+    color:var(--muted);
+
+    margin-bottom:14px;
+
+    font-size:14px;
+
+}
+
+.forecast-card h2{
+
+    color:white;
+
+    font-size:30px;
+
+    font-weight:800;
+
+}
+
+/* ==========================================================
+                    TREND BOX
+========================================================== */
+
+.trend-box{
+
+    margin-top:28px;
+
+    background:#1B2942;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:20px;
+
+    padding:24px;
+
+}
+
+.trend-box h3{
+
+    color:#60A5FA;
+
+    margin-bottom:14px;
+
+    font-size:22px;
+
+}
+
+.trend-box p{
+
+    color:var(--muted);
+
+    line-height:1.9;
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+                    STATUS COLORS
+========================================================== */
+
+#riskLevel,
+
+#riskLevelCard{
+
+    color:#22C55E;
+
+}
+
+#failureProbability,
+
+#failureProbabilityCard{
+
+    color:#F59E0B;
+
+}
+
+#confidence,
+
+#confidenceCard,
+
+#confidenceValue{
+
+    color:#3B82F6;
+
+}
+
+#rootCause{
+
+    color:#F8FAFC;
+
+}
+
+#recommendedAction{
+
+    color:#CBD5E1;
+
+}
+
+#primaryCause{
+
+    color:#60A5FA;
+
+    font-weight:700;
+
+}
+
+/* ==========================================================
+                    AI PROCESS VALUES
+========================================================== */
+
+#suspectProcess{
+
+    color:#3B82F6;
+
+}
+
+#suspectPid{
+
+    color:#F59E0B;
+
+}
+
+#processCpu{
+
+    color:#EF4444;
+
+}
+
+#processMemory{
+
+    color:#22C55E;
+
+}
+
+/* ==========================================================
+                    HEALTH CIRCLE
+========================================================== */
+
+#healthCircle{
+
+    background:linear-gradient(
+
+        135deg,
+
+        #2563EB,
+
+        #3B82F6
+
+    );
+
+}
+
+/* ==========================================================
+                    MODEL STATUS
+========================================================== */
+
+#modelStatus{
+
+    color:#22C55E;
+
+}
+/* ==========================================================
+                    FOOTER
+========================================================== */
+
+.footer{
+
+    margin-top:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:30px;
+
+    padding:35px;
+
+    background:#121B2D;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:28px;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.30);
+
+}
+
+.footer h3{
+
+    color:white;
+
+    font-size:24px;
+
+    margin-bottom:8px;
+
+}
+
+.footer p{
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    font-size:15px;
+
+}
+
+.footer span{
+
+    color:#60A5FA;
+
+    font-weight:700;
+
+    font-size:15px;
+
+}
+
+/* ==========================================================
+                    FADE ANIMATION
+========================================================== */
+
+.hero-section,
+.metric-grid,
+.dashboard-grid,
+.glass-card,
+.footer{
+
+    animation:fadeUp .6s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================================================
+                    CUSTOM SCROLLBAR
+========================================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+    height:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#09111F;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#334155;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#475569;
+
+}
+
+/* ==========================================================
+                    RESPONSIVE
+========================================================== */
+
+@media(max-width:1450px){
+
+    .metric-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+    .dashboard-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .forecast-grid{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:1100px){
+
+    .sidebar{
+
+        width:95px;
+
+        padding:22px;
+
+    }
+
+    .logo h2,
+    .logo span{
+
+        display:none;
+
+    }
+
+    .menu span{
+
+        display:none;
+
+    }
+
+    .menu a{
+
+        justify-content:center;
+
+    }
+
+    .main{
+
+        margin-left:95px;
+
+        width:calc(100% - 95px);
+
+        padding:35px;
+
+    }
+
+    .hero-section{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+
+        display:none;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:22px;
+
+    }
+
+    .topbar{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .metric-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .info-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .engine-status{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .prediction-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .forecast-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .hero-left{
+
+        padding:30px;
+
+    }
+
+    .hero-left h1{
+
+        font-size:46px;
+
+    }
+
+    .status-ring{
+
+        width:210px;
+
+        height:210px;
+
+    }
+
+    .status-inner{
+
+        width:165px;
+
+        height:165px;
+
+    }
+
+    .footer{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+}
+
+@media(max-width:500px){
+
+    .hero-left h1{
+
+        font-size:36px;
+
+    }
+
+    .hero-left p{
+
+        font-size:15px;
+
+    }
+
+    .glass-card{
+
+        padding:24px;
+
+    }
+
+    .metric-card{
+
+        padding:24px;
+
+    }
+
+    .card-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+    .card-header h2{
+
+        font-size:22px;
+
+    }
+
+}

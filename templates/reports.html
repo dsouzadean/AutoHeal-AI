@@ -3,107 +3,394 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<title>Reports</title>
+    <title>Reports | AutoHeal-AI</title>
 
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/reports.css') }}">
+
+    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<aside class="sidebar">
+<div class="background">
 
-<div class="logo">
-<h2>🤖 AutoHeal-AI</h2>
-<p>Predict • Heal • Learn</p>
+    <div class="gradient one"></div>
+
+    <div class="gradient two"></div>
+
 </div>
 
-<nav>
+<div class="dashboard-container">
 
-<ul>
+<!-- ================================================= -->
+<!-- Sidebar -->
+<!-- ================================================= -->
 
-<li onclick="location.href='/dashboard'">🏠 Dashboard</li>
+<aside class="sidebar">
 
-<li onclick="location.href='/monitoring'">📈 Monitoring</li>
+    <div class="logo">
 
-<li onclick="location.href='/ai-analysis'">🤖 AI Analysis</li>
+        <div class="logo-icon">
 
-<li onclick="location.href='/incidents'">🚨 Incidents</li>
+            <i class="fa-solid fa-brain"></i>
 
-<li class="active">📊 Reports</li>
+        </div>
 
-<li onclick="location.href='/settings'">⚙ Settings</li>
+        <div>
 
-</ul>
+            <h2>AutoHeal-AI</h2>
 
-</nav>
+            <span>Predict • Heal • Learn</span>
+
+        </div>
+
+    </div>
+
+    <nav class="menu">
+
+        <a href="/dashboard">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+        <a href="/monitoring">
+
+            <i class="fa-solid fa-desktop"></i>
+
+            <span>Monitoring</span>
+
+        </a>
+
+        <a href="/ai-analysis">
+
+            <i class="fa-solid fa-microchip"></i>
+
+            <span>AI Analysis</span>
+
+        </a>
+
+        <a href="/incidents">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+            <span>Incidents</span>
+
+        </a>
+
+        <a class="active"
+           href="/reports">
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            <span>Reports</span>
+
+        </a>
+
+        <a href="/settings">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Settings</span>
+
+        </a>
+
+    </nav>
 
 </aside>
+
+<!-- ================================================= -->
+<!-- Main -->
+<!-- ================================================= -->
 
 <main class="main">
 
 <header class="topbar">
 
-    <div>
+<div>
 
-        <h1>📊 System Reports</h1>
+<h1>
 
-        <p>Overall statistics collected from your system.</p>
+Reports & Analytics
 
-    </div>
+</h1>
 
-    <div class="top-right">
+<p>
 
-    <button id="exportPDF" class="action-btn pdf-btn">
-        📄 Export PDF
-    </button>
+Historical AI reports and performance analytics.
 
-    <button id="exportCSV" class="action-btn csv-btn">
-        📊 Export CSV
-    </button>
+</p>
 
-    <button id="themeBtn" class="action-btn theme-btn">
-        🌙 Dark Mode
-    </button>
+</div>
+
+<div class="top-actions">
+
+<button id="exportPDF"
+class="pdf-btn">
+
+<i class="fa-solid fa-file-pdf"></i>
+
+Export PDF
+
+</button>
+
+<button id="exportCSV"
+class="csv-btn">
+
+<i class="fa-solid fa-file-csv"></i>
+
+Export CSV
+
+</button>
 
 </div>
 
 </header>
 
-<section class="cards">
+<!-- ================================================ -->
+<!-- Hero -->
+<!-- ================================================ -->
 
-<div class="card">
-<h3>Average CPU</h3>
-<h1 id="avgCPU">0%</h1>
+<section class="hero">
+
+<div class="hero-left">
+
+<span>
+
+SYSTEM ANALYTICS
+
+</span>
+
+<h1>
+
+AI Report Center
+
+</h1>
+
+<p>
+
+View historical performance,
+AI generated analytics,
+resource trends,
+incident summaries,
+and export complete reports.
+
+</p>
+
 </div>
 
-<div class="card">
-<h3>Average Memory</h3>
-<h1 id="avgMemory">0%</h1>
+<div class="hero-right">
+
+<div class="report-circle">
+
+<div class="circle-inner">
+
+<h2 id="records">
+
+0
+
+</h2>
+
+<p>
+
+Reports
+
+</p>
+
 </div>
 
-<div class="card">
-<h3>Average Disk</h3>
-<h1 id="avgDisk">0%</h1>
 </div>
 
-<div class="card">
-<h3>Total Records</h3>
-<h1 id="records">0</h1>
 </div>
 
 </section>
 
-<section class="table-section">
+<!-- ================================================ -->
+<!-- Statistics -->
+<!-- ================================================ -->
 
-<div class="table-card">
+<section class="stats-grid">
 
-<h2>System Summary</h2>
+<div class="stat-card">
+
+<i class="fa-solid fa-microchip"></i>
+
+<p>
+
+Average CPU
+
+</p>
+
+<h2 id="avgCPU">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-memory"></i>
+
+<p>
+
+Average Memory
+
+</p>
+
+<h2 id="avgMemory">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-hard-drive"></i>
+
+<p>
+
+Average Disk
+
+</p>
+
+<h2 id="avgDisk">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="stat-card">
+
+<i class="fa-solid fa-database"></i>
+
+<p>
+
+Total Samples
+
+</p>
+
+<h2 id="cardRecords">
+
+0
+
+</h2>
+
+</div>
+
+</section>
+<!-- ================================================= -->
+<!-- Performance Analytics -->
+<!-- ================================================= -->
+
+<section class="analytics-grid">
+
+<div class="glass-card large-chart">
+
+<div class="card-header">
+
+<div>
+
+<span class="card-tag blue">
+
+Analytics
+
+</span>
+
+<h2>
+
+Performance Overview
+
+</h2>
+
+</div>
+
+<div class="live-badge">
+
+LIVE
+
+</div>
+
+</div>
+
+<div id="performanceChart"></div>
+
+</div>
+
+<div class="glass-card">
+
+<div class="card-header">
+
+<div>
+
+<span class="card-tag green">
+
+Distribution
+
+</span>
+
+<h2>
+
+Resource Usage
+
+</h2>
+
+</div>
+
+</div>
+
+<div id="resourcePie"></div>
+
+</div>
+
+</section>
+
+<!-- ================================================= -->
+<!-- Summary -->
+<!-- ================================================= -->
+
+<section class="bottom-grid">
+
+<div class="glass-card">
+
+<div class="card-header">
+
+<div>
+
+<span class="card-tag orange">
+
+Summary
+
+</span>
+
+<h2>
+
+System Statistics
+
+</h2>
+
+</div>
+
+</div>
+
+<div class="table-wrapper">
 
 <table>
 
@@ -111,9 +398,17 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 <tr>
 
-<th>Metric</th>
+<th>
 
-<th>Value</th>
+Metric
+
+</th>
+
+<th>
+
+Value
+
+</th>
 
 </tr>
 
@@ -121,19 +416,153 @@ href="{{ url_for('static', filename='css/dashboard.css') }}">
 
 <tbody id="summaryTable">
 
+<tr>
+
+<td colspan="2">
+
+Loading...
+
+</td>
+
+</tr>
+
 </tbody>
 
 </table>
 
 </div>
 
+</div>
+
+<div class="glass-card">
+
+<div class="card-header">
+
+<div>
+
+<span class="card-tag purple">
+
+AI Insights
+
+</span>
+
+<h2>
+
+System Intelligence
+
+</h2>
+
+</div>
+
+</div>
+
+<div class="insight-card">
+
+<h3>
+
+Performance Analysis
+
+</h3>
+
+<p>
+
+AutoHeal-AI continuously analyses every
+resource sample and stores historical
+patterns for anomaly prediction,
+resource optimisation and preventive
+maintenance.
+
+</p>
+
+</div>
+
+<div class="insight-card">
+
+<h3>
+
+Machine Learning
+
+</h3>
+
+<p>
+
+Historical datasets improve future
+predictions by allowing the AI engine
+to recognise recurring behaviour,
+abnormal trends and system degradation.
+
+</p>
+
+</div>
+
+<div class="insight-card">
+
+<h3>
+
+Recommendations
+
+</h3>
+
+<p>
+
+Export reports regularly to build
+larger datasets. More historical data
+results in significantly better AI
+prediction accuracy.
+
+</p>
+
+</div>
+
+</div>
+
 </section>
+<!-- ================================================= -->
+<!-- Footer -->
+<!-- ================================================= -->
+
+<footer class="footer">
+
+    <div>
+
+        <h3>
+
+            AutoHeal-AI
+
+        </h3>
+
+        <p>
+
+            Intelligent Predictive Monitoring • AI Analytics • Autonomous Self-Healing
+
+        </p>
+
+    </div>
+
+    <div class="footer-right">
+
+        <span>
+
+            Reports Module v2.0
+
+        </span>
+
+    </div>
+
+</footer>
 
 </main>
 
-<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</div>
+
+<!-- ================================================= -->
+<!-- Scripts -->
+<!-- ================================================= -->
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
 <script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 
 </body>
